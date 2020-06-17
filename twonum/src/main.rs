@@ -26,13 +26,13 @@ impl Solution {
         vec![]
     }
     pub fn two_sum2(nums: Vec<i32>, target: i32) -> Vec<i32> {
-	let mut map = HashMap::with_capacity(nums.len());
-	for i in 0..nums.len(){
-            match(map.get(target-nums[i])}
-		Node{
-            map.insert(nums[i],i);
-}
-Some(i2) => return vec![i, i2);}
+        let mut map = HashMap::with_capacity(nums.len());
+        for i in 0..nums.len() {
+            match map.get(&(target - nums[i])) {
+                Some(index) => return vec![*index as i32, i as i32],
+                None => map.insert(nums[i], i),
+            };
+        }
         vec![]
     }
 }
@@ -42,7 +42,7 @@ mod tests {
 
     #[test]
     fn test_1() {
-        assert_eq!(vec![0, 1], Solution::two_sum(vec![2, 7, 11, 15], 9));
-        assert_eq!(vec![1, 2], Solution::two_sum(vec![3, 2, 4], 6));
+        assert_eq!(vec![0, 1], Solution::two_sum2(vec![2, 7, 11, 15], 9));
+        assert_eq!(vec![1, 2], Solution::two_sum2(vec![3, 2, 4], 6));
     }
 }
