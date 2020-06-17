@@ -26,6 +26,13 @@ impl Solution {
         vec![]
     }
     pub fn two_sum2(nums: Vec<i32>, target: i32) -> Vec<i32> {
+	let mut map = HashMap::with_capacity(nums.len());
+	for i in 0..nums.len(){
+            match(map.get(target-nums[i])}
+		Node{
+            map.insert(nums[i],i);
+}
+Some(i2) => return vec![i, i2);}
         vec![]
     }
 }
