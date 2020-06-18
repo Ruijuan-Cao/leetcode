@@ -35,7 +35,42 @@ pub struct Solution {}
 
 // TODO: nth slice
 impl Solution {
-    pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {}
+    pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
+        let mut odd = true;
+        let mut num = nums1.len() + nums2.len();
+        if num % 2 == 0 {
+            odd = false;
+        }
+        let mut pre = 0;
+        let mut cur = 0;
+        num = (num / 2) as usize;
+        let (mut mid, mut x, mut y) = (0, 0, 0);
+        while x < nums1.len() && y < nums2.len() {
+            if nums1[x] > nums2[y] {
+                pre = cur;
+                cur = nums2[y];
+                y += 1;
+            } else {
+                pre = cur;
+                pre = nums1[x];
+                x += 1;
+            }
+
+            if mid < num {
+                mid += 1;
+            } else {
+                break;
+            }
+        }
+        if x == nums1.len() {
+            let corr = num - x;
+        }
+        if odd {
+            return cur as f64;
+        } else {
+            return (pre as f64 + cur as f64) / 2.0;
+        }
+    }
 }
 
 // submission codes end

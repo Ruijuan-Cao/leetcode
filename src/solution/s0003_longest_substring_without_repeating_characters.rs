@@ -18,7 +18,24 @@ pub struct Solution {}
 // submission codes start here
 
 impl Solution {
-    pub fn length_of_longest_substring(s: String) -> i32 {}
+    pub fn length_of_longest_substring(s: String) -> i32 {
+        let chars: Vec<char> = s.chars().collect();
+        let (mut start, mut end, mut max) = (0, 0, 0);
+        while end < chars.len() {
+            for x in start..end {
+                if chars[x] == chars[end] {
+                    start = x + 1;
+                    break;
+                }
+            }
+            let corr = end - start + 1;
+            if corr > max {
+                max = corr;
+            }
+            end += 1;
+        }
+        max as i32
+    }
 }
 
 // submission codes end
