@@ -45,6 +45,7 @@ impl Solution {
         let mut cur = 0;
         num = (num / 2) as usize;
         let (mut mid, mut x, mut y) = (0, 0, 0);
+        let mut geted = false;
         while x < nums1.len() && y < nums2.len() {
             if nums1[x] > nums2[y] {
                 pre = cur;
@@ -52,18 +53,42 @@ impl Solution {
                 y += 1;
             } else {
                 pre = cur;
-                pre = nums1[x];
+                cur = nums1[x];
                 x += 1;
             }
-
             if mid < num {
                 mid += 1;
             } else {
+                geted = true;
                 break;
             }
         }
         if x == nums1.len() {
-            let corr = num - x;
+            while y < nums2.len() {
+                pre = cur;
+                pre = nums2[y];
+                y += 1;
+
+                if mid < num {
+                    mid += 1;
+                } else {
+                    geted = true;
+                    break;
+                }
+            }
+        } else {
+            while x < nums1.len() {
+                pre = cur;
+                pre = nums1[x];
+                x += 1;
+
+                if mid < num {
+                    mid += 1;
+                } else {
+                    geted = true;
+                    break;
+                }
+            }
         }
         if odd {
             return cur as f64;
@@ -81,7 +106,6 @@ mod tests {
 
     // TODO: implementation
     #[test]
-    #[ignore]
     fn test_4() {
         assert_eq!(
             Solution::find_median_sorted_arrays(vec![1, 3], vec![2]),
