@@ -61,7 +61,7 @@ impl Solution {
         }
         maxlen
     }
-    pub fn longest_palindrome(s: String) -> String {
+    pub fn longest_palindrome_ma(s: String) -> String {
         let len = s.len();
         if len <= 1 {
             return s;
@@ -115,6 +115,67 @@ impl Solution {
             }
         }
         result
+    }
+
+    // by Manacher
+    pub fn longest_palindrome(s: String) -> String {
+        let len = s.len();
+        if len < 2 {
+            return s;
+        }
+
+        let mut ss = String::from("#");
+        let chars: Vec<char> = s.chars().collect();
+
+        for i in 0..len {
+            ss.push(chars[i]);
+            ss.push('#');
+        }
+
+        let after_chars: Vec<char> = ss.chars().collect();
+        let new_len = ss.len();
+
+        let mut mx_right = 0;
+        let mut mid_pos = 0;
+        let mut maxlen = 0;
+        let mut radius = vec![1; new_len];
+        let mut maxi = 0;
+        for i in 1..new_len {
+            if mx_right > i {
+                let j = 2 * mid_pos - i; //symmetrial point about mid_pos
+                let boundary = mx_right - i; //boundary of mx-right
+                if radius[j] > boundary {
+                    radius[i] = boundary;
+                } else {
+                    radius[i] = radius[j];
+                }
+            } else {
+                radius[i] = 1;
+            }
+
+            while i - radius[i] > 0
+                && i + radius[i] < new_len
+                && after_chars[i - radius[i]] == after_chars[i + radius[i]]
+            {
+                radius[i] += 1;
+            }
+
+            if i + radius[i] > mx_right {
+                mx_right = i + radius[i];
+                mid_pos = i;
+            }
+
+            if radius[i] - 1 > maxlen {
+                maxlen = radius[i] - 1;
+                maxi = i;
+            }
+        }
+
+        if (maxi - maxlen) % 2 == 0 {
+            s[(maxi - maxlen) / 2..(maxi + maxlen) / 2].to_string()
+        } else {
+            s[(maxi - maxlen - 1) / 2..(maxi + maxlen + 1) / 2].to_string()
+        }
     }
 }
 
