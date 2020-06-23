@@ -68,7 +68,7 @@ impl Solution {
         }
 
         let chars: Vec<char> = s.chars().collect();
-        let (mut cur_len, mut cur_start, mut cur_end) = (0, 0, 0);
+        let (mut cur_start, mut cur_end) = (0, 0);
         let mut maxlen = 0;
         let mut idx = 0;
         while idx < len {
@@ -86,7 +86,7 @@ impl Solution {
                 i -= 1;
                 j += 1;
             }
-            cur_len = j - i + 1;
+            let cur_len = j - i + 1;
             if cur_len > maxlen {
                 maxlen = cur_len;
                 cur_start = i;
@@ -104,7 +104,6 @@ impl Solution {
         let chars: Vec<char> = s.chars().collect();
         let mut table = vec![vec![false; len]; len];
         let mut result = chars[0].to_string();
-        let (mut i, mut j) = (0, 0);
         for j in 0..len {
             table[j][j] = true;
             for i in 0..j {

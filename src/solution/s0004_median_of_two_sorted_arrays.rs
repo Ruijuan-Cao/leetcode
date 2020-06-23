@@ -36,6 +36,9 @@ pub struct Solution {}
 // TODO: nth slice
 impl Solution {
     pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
+        if nums1.len() == 0 && nums2.len() == 0 {
+            return 0.0;
+        }
         let mut odd = true;
         let mut num = nums1.len() + nums2.len();
         if num % 2 == 0 {
@@ -56,6 +59,7 @@ impl Solution {
                 cur = nums1[x];
                 x += 1;
             }
+
             if mid < num {
                 mid += 1;
             } else {
@@ -63,33 +67,32 @@ impl Solution {
                 break;
             }
         }
-        if x == nums1.len() {
-            while y < nums2.len() {
-                pre = cur;
-                pre = nums2[y];
-                y += 1;
 
-                if mid < num {
-                    mid += 1;
-                } else {
-                    geted = true;
-                    break;
-                }
-            }
-        } else {
-            while x < nums1.len() {
-                pre = cur;
-                pre = nums1[x];
-                x += 1;
+        while !geted && y < nums2.len() {
+            pre = cur;
+            cur = nums2[y];
+            y += 1;
 
-                if mid < num {
-                    mid += 1;
-                } else {
-                    geted = true;
-                    break;
-                }
+            if mid < num {
+                mid += 1;
+            } else {
+                geted = true;
+                break;
             }
         }
+
+        while !geted && x < nums1.len() {
+            pre = cur;
+            cur = nums1[x];
+            x += 1;
+
+            if mid < num {
+                mid += 1;
+            } else {
+                break;
+            }
+        }
+
         if odd {
             return cur as f64;
         } else {
@@ -107,6 +110,12 @@ mod tests {
     // TODO: implementation
     #[test]
     fn test_4() {
+        assert_eq!(Solution::find_median_sorted_arrays(vec![1], vec![]), 1.0);
+        assert_eq!(
+            Solution::find_median_sorted_arrays(vec![], vec![1, 2, 3, 4, 5]),
+            3.0
+        );
+
         assert_eq!(
             Solution::find_median_sorted_arrays(vec![1, 3], vec![2]),
             2.0

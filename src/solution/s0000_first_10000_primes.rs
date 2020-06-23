@@ -4,7 +4,7 @@ pub fn first_10000_primes() -> u32 {
     let mut primes = vec![2; MAXNUM];
     let mut count = 1;
 
-    let mut flag = false;
+    let mut flag;
     let mut i = 3;
     loop {
         let mut j = 0;
@@ -24,7 +24,6 @@ pub fn first_10000_primes() -> u32 {
         }
         i += 2;
     }
-    0
 }
 
 #[cfg(test)]
