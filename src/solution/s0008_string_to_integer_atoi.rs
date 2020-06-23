@@ -67,7 +67,57 @@ pub struct Solution {}
 // submission codes start here
 
 impl Solution {
-    pub fn my_atoi(input: String) -> i32 {}
+    pub fn my_atoi(str: String) -> i32 {
+        let mut result = 0;
+        let chars: Vec<char> = str.chars().collect();
+        let mut first_space = true;
+        let mut negative = false;
+        let mut has_signal = false;
+        let mut has_dig = false;
+        for i in 0..str.len() {
+            if chars[i] >= '0' && chars[i] <= '9' {
+                has_dig = true;
+                let val = chars[i] as i32 - '0' as i32;
+
+                if result > std::i32::MAX / 10 || (result == std::i32::MAX / 10 && val > 7) {
+                    if negative {
+                        return std::i32::MIN;
+                    } else {
+                        return std::i32::MAX;
+                    }
+                }
+                result = result * 10 + val;
+            } else {
+                if has_dig || has_signal {
+                    break;
+                }
+                if chars[i] == '+' {
+                    has_signal = true;
+                    continue;
+                } else if chars[i] == '-' {
+                    has_signal = true;
+                    negative = true;
+                    continue;
+                } else if chars[i] == ' ' {
+                    if first_space {
+                        continue;
+                    } else {
+                        break;
+                    }
+                } else {
+                    if first_space {
+                        first_space = false;
+                    }
+                    break;
+                }
+            }
+        }
+        if negative {
+            0 - result
+        } else {
+            result
+        }
+    }
 }
 
 // submission codes end
@@ -84,5 +134,12 @@ mod tests {
         assert_eq!(Solution::my_atoi("4193 with words".to_string()), 4193);
         assert_eq!(Solution::my_atoi("42".to_string()), 42);
         assert_eq!(Solution::my_atoi("004193333".to_string()), 4193333);
+        assert_eq!(Solution::my_atoi("3.14".to_string()), 3);
+        assert_eq!(Solution::my_atoi(".1".to_string()), 0);
+        assert_eq!(Solution::my_atoi("+1".to_string()), 1);
+        assert_eq!(Solution::my_atoi("+-1".to_string()), 0);
+        assert_eq!(Solution::my_atoi("   +0 123".to_string()), 0);
+        assert_eq!(Solution::my_atoi("-2147483649".to_string()), -2147483648);
+        assert_eq!(Solution::my_atoi("0-2".to_string()), 0);
     }
 }
