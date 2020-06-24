@@ -148,15 +148,7 @@ impl Solution {
         }
         let s: Vec<char> = s.chars().collect();
         let p: Vec<char> = p.chars().collect();
-        if s.len() == 0 {
-            if p.len() == 0 {
-                return true;
-            } else if p.len() == 2 && p[0] != '*' && p[1] == '*' {
-                return true;
-            } else {
-                return false;
-            }
-        }
+
         //result[i][j]-if s[0..i] and p[0..j] match
         let mut result = vec![vec![false; p.len() + 1]; s.len() + 1];
         result[0][0] = true;
@@ -187,6 +179,7 @@ mod tests {
         assert_eq!(Solution::is_match("".to_string(), "a*".to_string()), true);
         assert_eq!(Solution::is_match("".to_string(), "*".to_string()), false);
         assert_eq!(Solution::is_match("".to_string(), ".".to_string()), false);
+        assert_eq!(Solution::is_match("".to_string(), "a*a*".to_string()), true);
         assert_eq!(Solution::is_match("".to_string(), "aa*".to_string()), false);
         assert_eq!(Solution::is_match("aa".to_string(), "a".to_string()), false);
         assert_eq!(Solution::is_match("aa".to_string(), "a*".to_string()), true);

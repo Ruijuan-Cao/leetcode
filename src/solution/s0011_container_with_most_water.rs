@@ -32,37 +32,23 @@ pub struct Solution {}
 // Two Pointer: a[0] ->    <- a[n-1]
 impl Solution {
     pub fn max_area(height: Vec<i32>) -> i32 {
-        let (mut start, mut end) = (0_usize, (height.len() - 1));
-        let mut max: i32 = (end - start) as i32 * Solution::min(height[start], height[end]);
-        let mut curr_area: i32 = 0;
-        while end - start > 1 {
-            // move the lower one
-            if height[start] < height[end] {
-                start += 1;
-                if height[start] < height[start - 1] {
-                    continue;
-                }
+        let mut max = 0;
+        let (mut x, mut y) = (0, height.len() - 1);
+        while x < y {
+            let width = (y - x) as i32;
+            let mut minh = 0;
+            if height[x] > height[y] {
+                minh = height[y];
+                y -= 1;
             } else {
-                end -= 1;
-                if height[end] < height[end + 1] {
-                    continue;
-                }
-            }
-            curr_area = (end - start) as i32 * Solution::min(height[start], height[end]);
-            if curr_area > max {
-                max = curr_area
+                minh = height[x];
+                x += 1;
+            };
+            if width * minh > max {
+                max = width * minh;
             }
         }
         max
-    }
-
-    #[inline(always)]
-    fn min(i: i32, j: i32) -> i32 {
-        if i > j {
-            j
-        } else {
-            i
-        }
     }
 }
 
