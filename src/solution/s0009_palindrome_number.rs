@@ -44,27 +44,16 @@ impl Solution {
         if x < 0 {
             return false;
         }
-        let mut digits: Vec<i32> = Vec::new();
-        let mut input = x;
-        while input != 0 {
-            digits.push(input % 10);
-            input = input / 10;
+        let mut seq = Vec::new();
+        let mut num = x;
+        while num > 0 {
+            seq.push(num % 10);
+            num = num / 10;
         }
-        let len = digits.len();
-        // handle one digit
-        if len < 2 {
-            return true;
-        }
-        // handle end with 0
-        if digits[0] == 0 {
-            return false;
-        }
-        let mut i = 0;
-        while i < len / 2 {
-            if digits[i] != digits[len - 1 - i] {
+        for i in 0..seq.len() / 2 {
+            if seq[i] != seq[seq.len() - 1 - i] {
                 return false;
             }
-            i += 1;
         }
         true
     }
