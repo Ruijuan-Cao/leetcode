@@ -35,29 +35,19 @@ pub struct Solution {}
 use std::str::Chars;
 impl Solution {
     pub fn longest_common_prefix(strs: Vec<String>) -> String {
-        let mut prefix = String::new();
-        let mut iters: Vec<Chars> = strs.iter().map(|s| s.chars()).collect();
-        let mut curr_char: Option<char> = None;
         if strs.len() < 1 {
-            return prefix;
+            return "".to_string();
         }
-        loop {
-            curr_char.take().map(|ch| prefix.push(ch));
-            for iter in iters.iter_mut() {
-                let mut ch = iter.next();
-                if ch.is_none() {
-                    return prefix;
-                }
-                match curr_char {
-                    None => curr_char = ch.take(),
-                    Some(curr) => {
-                        if curr != ch.unwrap() {
-                            return prefix;
-                        }
-                    }
-                }
+        let mut s = strs[0].clone();
+        for i in strs.iter() {
+            while s.len() > i.len() {
+                s.pop();
+            }
+            while s != i[..s.len()] {
+                s.pop();
             }
         }
+        s
     }
 }
 
@@ -71,7 +61,7 @@ mod tests {
     fn test_14() {
         assert_eq!(
             Solution::longest_common_prefix(vec![
-                "".to_string(),
+                "dog".to_string(),
                 "racecar".to_string(),
                 "car".to_string()
             ]),

@@ -68,7 +68,7 @@ pub struct Solution {}
 
 impl Solution {
     pub fn roman_to_int(s: String) -> i32 {
-        let table: Vec<(i32, &'static str)> = vec![
+        let table = vec![
             (1000, "M"),
             (900, "CM"),
             (500, "D"),
@@ -83,18 +83,22 @@ impl Solution {
             (4, "IV"),
             (1, "I"),
         ];
-        let mut sum = 0;
-        let mut idx = 0;
-        for p in table.iter() {
-            while idx + p.1.len() <= s.len() && p.1 == &s[idx..idx + p.1.len()] {
-                idx += p.1.len();
-                sum += p.0;
-                if idx >= s.len() {
-                    return sum;
+        let mut result = 0;
+        let mut i = 0;
+        while i < s.len() {
+            for j in 0..table.len() {
+                if i + 2 <= s.len() && &s[i..i + 2] == table[j].1 {
+                    result += table[j].0;
+                    i += 2;
+                } else {
+                    if i + 1 <= s.len() && &s[i..i + 1] == table[j].1 {
+                        result += table[j].0;
+                        i += 1;
+                    }
                 }
             }
         }
-        sum
+        result
     }
 }
 

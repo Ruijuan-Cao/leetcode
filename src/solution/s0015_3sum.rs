@@ -28,60 +28,70 @@ pub struct Solution {}
 // submission codes start here
 
 impl Solution {
-    pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
-        let len = nums.len();
-        if len < 3 {
-            return vec![];
+    pub fn quick_sort(nums: &mut Vec<i32>, left: usize, right: usize) {
+        if left >= right {
+            return;
         }
-        let mut nums = nums;
-        nums.sort();
-        let mut i = 0;
+
+        let mut l = left;
+        let mut r = right;
+        let temp = nums[left];
+        while l < r {
+            //must from right to left
+            while l < r && nums[r] >= temp {
+                r -= 1;
+            }
+            while l < r && nums[l] <= temp {
+                l += 1;
+            }
+            //return to iter again
+            nums.swap(l, r);
+        }
+        nums.swap(left, l);
+        if l > 1 {
+            Solution::quick_sort(nums, left, l - 1);
+        }
+        Solution::quick_sort(nums, r + 1, right);
+    }
+
+    pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
         let mut result: Vec<Vec<i32>> = Vec::new();
-        let mut previous = nums[0] - 1;
-        while i < len - 2 {
-            // skip same number
-            if nums[i] == previous {
-                i += 1;
+        if nums.len() < 3 {
+            return result;
+        }
+        let len = nums.len();
+        let mut nums_mut = nums;
+        Solution::quick_sort(&mut nums_mut, 0, len - 1);
+
+        for i in 0..len - 2 {
+            if i > 0 && nums_mut[i] == nums_mut[i - 1] {
                 continue;
             }
-            previous = nums[i];
-            let mut vec = Solution::two_sum(&nums[(i + 1)..len], 0 - nums[i]);
-            for t in vec.iter() {
-                result.push(vec![nums[i], t.0, t.1]);
-            }
-            i += 1;
-        }
-        result
-    }
-
-    // 2 sum using 2 pointers: nums[0] ->   <- nums[len-1]
-    #[inline(always)]
-    fn two_sum(nums: &[i32], sum: i32) -> Vec<(i32, i32)> {
-        let (mut i, mut j) = (0_usize, nums.len() - 1);
-        let mut result = Vec::new();
-        while i < j {
-            if nums[i] + nums[j] < sum {
-                i += 1
-            } else if nums[i] + nums[j] > sum {
-                j -= 1
-            } else {
-                result.push((nums[i], nums[j]));
-                i = Solution::next_unique(nums, i, true);
-                j = Solution::next_unique(nums, j, false);
+            let sum = 0 - nums_mut[i];
+            let mut x = i + 1;
+            let mut y = len - 1;
+            while x < y {
+                if nums_mut[x] + nums_mut[y] == sum {
+                    let re = vec![nums_mut[i], nums_mut[x], nums_mut[y]];
+                    result.push(re);
+                    //remove the same number
+                    while x < y && nums_mut[x] == nums_mut[x + 1] {
+                        x += 1;
+                    }
+                    while x < y && nums_mut[y] == nums_mut[y - 1] {
+                        y -= 1;
+                    }
+                    x += 1;
+                    y -= 1;
+                } else if nums_mut[x] + nums_mut[y] < sum {
+                    x += 1;
+                } else {
+                    y -= 1;
+                }
             }
         }
-        result
-    }
 
-    // seek next un-repeat number
-    #[inline(always)]
-    fn next_unique(nums: &[i32], idx: usize, forward: bool) -> usize {
-        let curr = nums[idx];
-        let mut i = idx;
-        while i > 0 && i < nums.len() && nums[i] == curr {
-            i = if forward { i + 1 } else { i - 1 }
-        }
-        i
+        result
     }
 }
 
