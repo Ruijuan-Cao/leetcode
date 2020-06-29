@@ -42,28 +42,29 @@ impl Solution {
 
         for mut i in 0..nums.len() - 3 {
             if result.len() > 0 && i > 0 && nums[i] == nums[i - 1] {
-                i += 1;
                 continue;
             }
-
             for mut j in (i + 1)..nums.len() - 2 {
-                if result.len() > 0 && j > 0 && nums[j] == nums[j - 1] {
-                    j += 1;
-                    continue;
+                // if result.len() > 0 && j > 0 && nums[j] == nums[j - 1]  {
+                //     continue;
+                // }
+                if result.len() > 0 && result[result.len()-1][0] == nums[i] && result[result.len()-1][1] == nums[j]{
+                    continue;          
                 }
-
-                let mut x = i + 1;
+                let mut x = j + 1;
                 let mut y = nums.len() - 1;
                 let sum = target - nums[i] - nums[j];
                 while x < y {
                     if nums[x] + nums[y] == sum {
                         result.push(vec![nums[i], nums[j], nums[x], nums[y]]);
+
                         while x < y && nums[x] == nums[x + 1] {
                             x += 1;
                         }
                         while x < y && nums[y] == nums[y - 1] {
                             y -= 1;
                         }
+
                         x += 1;
                         y -= 1;
                     } else if nums[x] + nums[y] > sum {
@@ -72,12 +73,6 @@ impl Solution {
                         x += 1;
                     }
                 }
-                while j < nums.len() - 2 && nums[j] == nums[j + 1] {
-                    j += 1;
-                }
-            }
-            while i < nums.len() - 3 && nums[i] == nums[i + 1] {
-                i += 1;
             }
         }
         result
@@ -99,8 +94,8 @@ mod tests {
         );
         assert_eq!(Solution::four_sum(vec![0, 0, 0, 0], 0), vec![[0, 0, 0, 0]]);
         assert_eq!(
-            Solution::four_sum(vec![-3, -1, 0, 2, 4, 5], 0),
-            vec![[-3, -1, 0, 4]]
+            Solution::four_sum(vec![-1,0,1,2,-1,-4], -1),
+            vec![[-3, -1, 0, 5]]
         );
     }
 }

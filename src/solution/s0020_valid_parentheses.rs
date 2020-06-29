@@ -66,15 +66,24 @@ impl Solution {
                         || (last == &'[' && ch == ']')
                     {
                         stack.pop();
-                        continue;
+                    }
+                    else {
+                        stack.push(ch);
                     }
                 }
                 None => {
                     stack.push(ch);
                 }
+
             }
         }
-        true
+
+        if stack.len() == 0 {
+            true
+        }
+        else {
+            false
+        }
     }
 }
 
@@ -86,6 +95,6 @@ mod tests {
 
     #[test]
     fn test_20() {
-        assert_eq!(Solution::is_valid("()[]{}".to_string()), true);
+        assert_eq!(Solution::is_valid("([)".to_string()), false);
     }
 }
