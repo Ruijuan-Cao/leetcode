@@ -24,37 +24,37 @@ impl Solution {
         let mut nums = nums;
         let mut min_distance: i32 = i32::max_value();
         nums.sort();
-        let mut i = 0;
-        while i < nums.len() - 2 {
-            let sub_min = Solution::two_sum_closest(&nums[(i + 1)..nums.len()], target - nums[i]);
-            if sub_min.abs() < min_distance.abs() {
-                min_distance = sub_min;
+        for i in 0..nums.len() - 2 {
+            let min = Solution::two_sum_closest(&nums[(i + 1)..nums.len()], target - nums[i]);
+            if min.abs() < min_distance.abs() {
+                min_distance = min;
                 if min_distance == 0 {
-                    break;
+                    return target;
                 }
             }
-            i += 1;
         }
         target + min_distance
     }
 
+    //two_sum_closest
     pub fn two_sum_closest(nums: &[i32], target: i32) -> i32 {
-        let (mut i, mut j) = (0_usize, nums.len() - 1);
-        let mut local_min = i32::max_value();
+        let mut i = 0;
+        let mut j = nums.len() - 1;
+        let mut distance: i32 = i32::max_value();
         while i < j {
             let sum = nums[i] + nums[j];
-            if sum > target {
-                j -= 1;
-            } else if sum < target {
-                i += 1;
-            } else {
+            if sum == target {
                 return 0;
+            } else if (sum > target) {
+                j -= 1;
+            } else {
+                i += 1;
             }
-            if (sum - target).abs() < local_min.abs() {
-                local_min = sum - target
+            if (target - sum).abs() < distance.abs() {
+                distance = sum - target;
             }
         }
-        local_min
+        distance
     }
 }
 

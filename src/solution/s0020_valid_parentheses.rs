@@ -60,24 +60,21 @@ impl Solution {
         let mut stack: Vec<char> = Vec::new();
         for ch in s.chars().into_iter() {
             match stack.last() {
-                None => {}
-                Some(&last) => {
-                    if Solution::pair(last, ch) {
+                Some(last) => {
+                    if (last == &'(' && ch == ')')
+                        || (last == &'{' && ch == '}')
+                        || (last == &'[' && ch == ']')
+                    {
                         stack.pop();
                         continue;
                     }
                 }
+                None => {
+                    stack.push(ch);
+                }
             }
-            stack.push(ch);
         }
-        stack.is_empty()
-    }
-
-    #[inline(always)]
-    fn pair(open: char, close: char) -> bool {
-        (open == '{' && close == '}')
-            || (open == '(' && close == ')')
-            || (open == '[' && close == ']')
+        true
     }
 }
 

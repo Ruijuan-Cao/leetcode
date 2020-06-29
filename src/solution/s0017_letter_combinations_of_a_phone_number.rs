@@ -28,8 +28,10 @@ pub struct Solution {}
 
 impl Solution {
     pub fn letter_combinations(digits: String) -> Vec<String> {
-        // '0' and '1' as placeholder to avoid index shifting
-        let table: Vec<(char, Vec<char>)> = vec![
+        if digits.len() < 1 {
+            return vec![];
+        }
+        let table = vec![
             ('0', vec![]),
             ('1', vec![]),
             ('2', vec!['a', 'b', 'c']),
@@ -41,27 +43,25 @@ impl Solution {
             ('8', vec!['t', 'u', 'v']),
             ('9', vec!['w', 'x', 'y', 'z']),
         ];
-        if digits.len() < 1 {
-            return vec![];
-        }
-        let mut combs: Vec<String> = vec![String::with_capacity(digits.len())];
+        let mut result: Vec<String> = vec![String::with_capacity(digits.len())];
         for ch in digits.chars().into_iter() {
             let chs = &table[ch.to_digit(10).unwrap() as usize].1;
-            let mut added: Vec<String> = Vec::with_capacity((chs.len() - 1) * combs.len());
-            for comb in combs.iter_mut() {
-                for (i, &alphabetic) in chs.iter().enumerate() {
+            let cap = (chs.len() - 1) * result.len();
+            let mut temp: Vec<String> = Vec::with_capacity(cap);
+            for iter in result.iter_mut() {
+                for (i, &ch) in chs.iter().enumerate() {
                     if i == chs.len() - 1 {
-                        comb.push(alphabetic);
+                        iter.push(ch);
                     } else {
-                        let mut new_comb = (*comb).clone();
-                        new_comb.push(alphabetic);
-                        added.push(new_comb);
+                        let mut new_iter = (*iter).clone();
+                        new_iter.push(ch);
+                        temp.push(new_iter);
                     }
                 }
             }
-            combs.append(&mut added);
+            result.append(&mut temp);
         }
-        combs
+        result
     }
 }
 

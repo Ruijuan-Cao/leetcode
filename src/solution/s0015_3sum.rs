@@ -61,7 +61,8 @@ impl Solution {
         }
         let len = nums.len();
         let mut nums_mut = nums;
-        Solution::quick_sort(&mut nums_mut, 0, len - 1);
+        //Solution::quick_sort(&mut nums_mut, 0, len - 1);
+        nums_mut.sort();
 
         for i in 0..len - 2 {
             if i > 0 && nums_mut[i] == nums_mut[i - 1] {
@@ -90,7 +91,6 @@ impl Solution {
                 }
             }
         }
-
         result
     }
 }
@@ -147,6 +147,7 @@ mod tests {
             Solution::three_sum(vec![2, 0, -2, -5, -5, -3, 2, -4]),
             vec![vec![-4, 2, 2], vec![-2, 0, 2]]
         );
+        assert_eq!(Solution::three_sum(vec![0, 0, 0]), vec![[0, 0, 0]]);
         let empty_vec: Vec<Vec<i32>> = vec![];
         assert_eq!(Solution::three_sum(vec![]), empty_vec);
     }

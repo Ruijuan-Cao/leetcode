@@ -32,25 +32,26 @@ use crate::util::linked_list::{to_list, ListNode};
 // but two pass don't takes longer time
 impl Solution {
     pub fn remove_nth_from_end(head: Option<Box<ListNode>>, n: i32) -> Option<Box<ListNode>> {
-        let mut dummy_head = Some(Box::new(ListNode { val: 0, next: head }));
+        let mut null_head = Some(Box::new(ListNode { val: 0, next: head }));
+        //get all length
         let mut len = 0;
-        {
-            let mut p = dummy_head.as_ref();
-            while p.unwrap().next.is_some() {
-                len += 1;
-                p = p.unwrap().next.as_ref();
-            }
+        let mut x = null_head.as_ref();
+        while x.unwrap().next.is_some() {
+            len += 1;
+            x = x.unwrap().next.as_ref();
         }
-        let idx = len - n;
-        {
-            let mut p = dummy_head.as_mut();
-            for _ in 0..(idx) {
-                p = p.unwrap().next.as_mut();
-            }
-            let next = p.as_mut().unwrap().next.as_mut().unwrap().next.take();
-            p.as_mut().unwrap().next = next;
+        //get left
+        let left = len - n;
+        let mut y = null_head.as_mut();
+        for _ in 0..left {
+            y = y.unwrap().next.as_mut();
         }
-        dummy_head.unwrap().next
+        //get right
+        let right = y.as_mut().unwrap().next.as_mut().unwrap().next.take();
+        //get together
+        y.as_mut().unwrap().next = right;
+
+        null_head.unwrap().next
     }
 }
 

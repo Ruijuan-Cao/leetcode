@@ -31,53 +31,56 @@ pub struct Solution {}
 // TODO: change to faster N^3 solution... maybe
 // this is a N^2 * logN solution, but slower than N^3 solution
 // iterate all combinations and the sum of 2 elements, then use one-round hash
-use std::collections::BTreeMap;
-use std::collections::HashSet;
 impl Solution {
     pub fn four_sum(nums: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
+        let mut result = Vec::new();
+        let mut nums = nums;
         if nums.len() < 4 {
-            return vec![];
+            return result;
         }
-        let mut set: HashSet<Vec<i32>> = HashSet::new();
-        let mut map: BTreeMap<i32, Vec<(usize, usize)>> = BTreeMap::new();
-        // collect two-sums in asc order, store the index to avoid single number reusing
-        for i in 0..(nums.len() - 1) {
-            for j in (i + 1)..nums.len() {
-                map.entry(nums[i] + nums[j])
-                    .or_insert(Vec::new())
-                    .push((i, j));
+        nums.sort();
+
+        for mut i in 0..nums.len() - 3 {
+            if result.len() > 0 && i > 0 && nums[i] == nums[i - 1] {
+                i += 1;
+                continue;
             }
-        }
-        // find results
-        for (&sum, pairs) in map.iter() {
-            // avoid duplicates
-            if sum > target / 2 {
-                break;
-            }
-            match map.get(&(target - sum)) {
-                None => continue,
-                // 2-sum + 2-sum == target, then all the possible combination
-                // (without index conflicts) is our answer
-                Some(subs) => {
-                    for pair in pairs.iter() {
-                        for sub in subs.iter() {
-                            if sub.0 == pair.0
-                                || sub.0 == pair.1
-                                || sub.1 == pair.0
-                                || sub.1 == pair.1
-                            {
-                                continue;
-                            }
-                            let mut vec =
-                                vec![nums[pair.0], nums[pair.1], nums[sub.0], nums[sub.1]];
-                            vec.sort();
-                            set.insert(vec);
+
+            for mut j in (i + 1)..nums.len() - 2 {
+                if result.len() > 0 && j > 0 && nums[j] == nums[j - 1] {
+                    j += 1;
+                    continue;
+                }
+
+                let mut x = i + 1;
+                let mut y = nums.len() - 1;
+                let sum = target - nums[i] - nums[j];
+                while x < y {
+                    if nums[x] + nums[y] == sum {
+                        result.push(vec![nums[i], nums[j], nums[x], nums[y]]);
+                        while x < y && nums[x] == nums[x + 1] {
+                            x += 1;
                         }
+                        while x < y && nums[y] == nums[y - 1] {
+                            y -= 1;
+                        }
+                        x += 1;
+                        y -= 1;
+                    } else if nums[x] + nums[y] > sum {
+                        y -= 1;
+                    } else {
+                        x += 1;
                     }
                 }
+                while j < nums.len() - 2 && nums[j] == nums[j + 1] {
+                    j += 1;
+                }
+            }
+            while i < nums.len() - 3 && nums[i] == nums[i + 1] {
+                i += 1;
             }
         }
-        set.into_iter().collect()
+        result
     }
 }
 
@@ -89,11 +92,15 @@ mod tests {
 
     // TODO: build a macro for arbitrary match
     #[test]
-    #[ignore]
     fn test_18() {
         assert_eq!(
             Solution::four_sum(vec![1, 0, -1, 0, -2, 2], 0),
-            vec![vec![-1, 0, 0, 1], vec![-2, 0, 0, 2], vec![-2, -1, 1, 2]]
+            vec![vec![-2, -1, 1, 2], vec![-2, 0, 0, 2], vec![-1, 0, 0, 1]]
+        );
+        assert_eq!(Solution::four_sum(vec![0, 0, 0, 0], 0), vec![[0, 0, 0, 0]]);
+        assert_eq!(
+            Solution::four_sum(vec![-3, -1, 0, 2, 4, 5], 0),
+            vec![[-3, -1, 0, 4]]
         );
     }
 }
