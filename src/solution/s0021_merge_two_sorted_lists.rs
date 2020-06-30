@@ -24,38 +24,40 @@ impl Solution {
         l1: Option<Box<ListNode>>,
         l2: Option<Box<ListNode>>,
     ) -> Option<Box<ListNode>> {
-        let mut dummy_head = Some(Box::new(ListNode { val: 0, next: None }));
-        let mut head = &mut dummy_head;
-        let (mut l1, mut l2) = (l1, l2);
+        let mut result = Some(Box::new(ListNode { val: 0, next: None }));
+        let mut head = &mut result;
+        let mut l1 = l1;
+        let mut l2 = l2;
         while l1.is_some() || l2.is_some() {
-            if l1.is_none() {
-                head.as_mut().unwrap().next = l2;
-                break;
-            } else if l2.is_none() {
+            if l1.is_some() && l2.is_some() {
+                if l1.as_ref().unwrap().val <= l2.as_ref().unwrap().val {
+                    let (cur_next, cur_head) = Solution::take_head(l1);
+                    head.as_mut().unwrap().next = cur_head;
+                    l1 = cur_next;
+                } else {
+                    let (cur_next, cur_head) = Solution::take_head(l2);
+                    head.as_mut().unwrap().next = cur_head;
+                    l2 = cur_next;
+                }
+                head = &mut head.as_mut().unwrap().next;
+            } else if (l1.is_some()) {
                 head.as_mut().unwrap().next = l1;
                 break;
-            }
-            let next = if l1.as_ref().unwrap().val < l2.as_ref().unwrap().val {
-                let (origin, next) = Solution::take_head(l1);
-                l1 = origin;
-                next
             } else {
-                let (origin, next) = Solution::take_head(l2);
-                l2 = origin;
-                next
-            };
-            head.as_mut().unwrap().next = next;
-            head = &mut head.as_mut().unwrap().next;
+                head.as_mut().unwrap().next = l2;
+                break;
+            }
         }
-        dummy_head.unwrap().next
+        result.unwrap().next
     }
 
-    #[inline(always)]
-    fn take_head(mut l: Option<Box<ListNode>>) -> (Option<Box<ListNode>>, Option<Box<ListNode>>) {
-        let l_next = l.as_mut().unwrap().next.take();
-        let next = l.take();
-        l = l_next;
-        (l, next)
+    pub fn take_head(
+        mut l: Option<Box<ListNode>>,
+    ) -> (Option<Box<ListNode>>, Option<Box<ListNode>>) {
+        let next = l.as_mut().unwrap().next.take();
+        let head = l.take();
+        l = next;
+        (l, head)
     }
 }
 

@@ -49,12 +49,12 @@ impl PartialOrd for Node {
 
 impl Solution {
     pub fn merge_k_lists(lists: Vec<Option<Box<ListNode>>>) -> Option<Box<ListNode>> {
-        let mut heap: BinaryHeap<Node> = BinaryHeap::new();
-        for (idx, node) in lists.iter().enumerate() {
-            node.as_ref()
-                .and_then(|n| Some(heap.push(Node(n.val, idx))));
+        let mut min_heap = BinaryHeap::new();
+        for (index, node) in lists.iter().enumerate() {
+            let val = node.as_ref().unwrap().val;
+            min_heap.push(Node(val, index));
         }
-        Solution::next(lists, &mut heap)
+        Solution::next(lists, &mut min_heap)
     }
 
     fn next(
