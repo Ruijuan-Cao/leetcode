@@ -77,9 +77,7 @@ impl Solution {
                         haved[i].insert(j + 2, ')');
                         let xx = haved[i].clone();
                         result_set.insert(xx);
-                        println!("before:{}", haved[i]);
                         haved[i] = cur_str_copy;
-                        println!("after:{}", haved[i]);
                     }
                     let s = "()".to_string() + &haved[i];
                     result_set.insert(s);
@@ -89,7 +87,6 @@ impl Solution {
         let mut result: Vec<String> = Vec::new();
         for x in result_set.iter() {
             result.push(x.to_string());
-            println!("x={:?}", x);
         }
         result
     }

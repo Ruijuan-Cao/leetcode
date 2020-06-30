@@ -22,39 +22,36 @@ use crate::util::linked_list::{to_list, ListNode};
 // problem: https://leetcode.com/problems/merge-k-sorted-lists/
 // discuss: https://leetcode.com/problems/merge-k-sorted-lists/discuss/?currentPage=1&orderBy=most_votes&query=
 
-// submission codes start here
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
 
-// head value and the index
 struct Node(i32, usize);
-
-// sort in reverse order of head value
-impl Ord for Node {
+impl std::cmp::Ord for Node {
     fn cmp(&self, other: &Self) -> Ordering {
         self.0.cmp(&other.0).reverse()
     }
 }
-impl PartialEq for Node {
+impl std::cmp::Eq for Node {
+    // add code here
+}
+impl std::cmp::PartialEq for Node {
     fn eq(&self, other: &Self) -> bool {
-        self.0.eq(&other.0)
+        self.0 == other.0
     }
 }
-impl Eq for Node {}
-impl PartialOrd for Node {
+impl std::cmp::PartialOrd for Node {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.0.cmp(&other.0).reverse())
+        Some(self.cmp(other))
     }
 }
 
 impl Solution {
     pub fn merge_k_lists(lists: Vec<Option<Box<ListNode>>>) -> Option<Box<ListNode>> {
-        let mut min_heap = BinaryHeap::new();
+        let mut heap = BinaryHeap::new();
         for (index, node) in lists.iter().enumerate() {
-            let val = node.as_ref().unwrap().val;
-            min_heap.push(Node(val, index));
+            node.as_ref().map(|n| heap.push(Node(n.val, index)));
         }
-        Solution::next(lists, &mut min_heap)
+        Solution::next(lists, &mut heap)
     }
 
     fn next(
@@ -63,8 +60,7 @@ impl Solution {
     ) -> Option<Box<ListNode>> {
         heap.pop().map(|node| {
             let next = lists[node.1].take().unwrap().next;
-            next.as_ref()
-                .and_then(|n| Some(heap.push(Node(n.val, node.1))));
+            next.as_ref().map(|n| heap.push(Node(n.val, node.1)));
             lists[node.1] = next;
             Box::new(ListNode {
                 val: node.0,
