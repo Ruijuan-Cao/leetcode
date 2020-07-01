@@ -34,47 +34,38 @@ use crate::util::linked_list::{to_list, ListNode};
 
 impl Solution {
     pub fn reverse_k_group(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
-        let mut dummy_head = Some(Box::new(ListNode { val: 0, next: head }));
-        let mut head = dummy_head.as_mut();
-        'outer: loop {
-            let mut start = head.as_mut().unwrap().next.take();
-            if start.is_none() {
-                break 'outer;
+        let mut result = Some(Box::new(ListNode { val: 0, next: head }));
+        let mut head = result.as_mut();
+
+        loop {
+            let mut left = head.as_mut().unwrap().next.take();
+            if left.is_none() {
+                return result.unwrap().next;
             }
-            let mut end = start.as_mut();
-            for _ in 0..(k - 1) {
-                end = end.unwrap().next.as_mut();
-                if end.is_none() {
-                    head.as_mut().unwrap().next = start;
-                    break 'outer;
+            let mut right = left.as_mut();
+            for _ in 0..k - 1 {
+                right = right.unwrap().next.as_mut();
+                if right.is_none() {
+                    head.as_mut().unwrap().next = left;
+                    return result.unwrap().next;
                 }
             }
-            let mut tail = end.as_mut().unwrap().next.take();
-            // BEFORE: head -> start -> 123456... -> end   -> tail
-            // AFTER:  head -> end   -> ...654321 -> start -> tail
-            let end = Solution::reverse(start, tail);
-            head.as_mut().unwrap().next = end;
+
+            let mut right_next = right.as_mut().unwrap().next.take();
+            let mut cur = left;
+            let mut last = right_next;
+            while let Some(mut cur_node) = cur {
+                let mut next = cur_node.next.take();
+                cur = next;
+                cur_node.next = last;
+                last = Some(cur_node);
+            }
+            head.as_mut().unwrap().next = last;
             for _ in 0..k {
-                head = head.unwrap().next.as_mut()
+                head = head.unwrap().next.as_mut();
             }
         }
-        dummy_head.unwrap().next
-    }
-
-    #[inline(always)]
-    fn reverse(
-        mut head: Option<Box<ListNode>>,
-        tail: Option<Box<ListNode>>,
-    ) -> Option<Box<ListNode>> {
-        let mut prev = tail;
-        let mut current = head;
-        while let Some(mut current_node_inner) = current {
-            let mut next = current_node_inner.next.take();
-            current_node_inner.next = prev.take();
-            prev = Some(current_node_inner);
-            current = next;
-        }
-        prev
+        result.unwrap().next
     }
 }
 

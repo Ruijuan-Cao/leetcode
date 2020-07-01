@@ -52,18 +52,20 @@ pub struct Solution {}
 
 impl Solution {
     pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
-        let len = nums.len();
-        if len <= 1 {
+        let mut len = nums.len();
+        if len < 2 {
             return len as i32;
         }
-        let mut slow = 0usize;
-        for fast in 1..len {
-            if nums[slow] != nums[fast] {
-                slow += 1;
-                nums[slow] = nums[fast];
+        let mut cur_index = 0;
+        for i in 1..len {
+            if nums[cur_index] == nums[cur_index + 1] {
+                nums.remove(cur_index + 1);
+            } else {
+                cur_index += 1;
             }
+            println!("{:?}:{}-{}", nums, cur_index, len);
         }
-        (slow + 1) as i32
+        cur_index as i32 + 1
     }
 }
 

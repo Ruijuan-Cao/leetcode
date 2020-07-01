@@ -38,7 +38,10 @@ impl Solution {
         if needle.is_empty() {
             return 0;
         }
-        haystack.find(&needle).map_or(-1_i32, |v| v as i32)
+        match haystack.find(&needle) {
+            Some(v) => v as i32,
+            None => -1 as i32,
+        }
     }
 }
 

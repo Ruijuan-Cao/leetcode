@@ -26,28 +26,27 @@ use crate::util::linked_list::{to_list, ListNode};
 
 impl Solution {
     pub fn swap_pairs(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        let mut dummy_head = Some(Box::new(ListNode { val: 0, next: head }));
-        let mut head = dummy_head.as_mut();
+        let mut result = Some(Box::new(ListNode { val: 0, next: head }));
+        let mut head = result.as_mut();
         loop {
             let mut left = head.as_mut().unwrap().next.take();
             if left.is_none() {
                 break;
             }
             let mut right = left.as_mut().unwrap().next.take();
-            // handle the un-paired one, e.g. [1, 2, 3] -> [2, 1, 3], 3 is un-paired
             if right.is_none() {
                 head.as_mut().unwrap().next = left;
                 break;
             }
-            let mut next = right.as_mut().unwrap().next.take();
-            // BEFORE: head -> left -> right -> next
-            // AFTER: head -> right -> left -> next
-            left.as_mut().unwrap().next = next;
+            //swap left and right
+            let mut right_next = right.as_mut().unwrap().next.take();
+            left.as_mut().unwrap().next = right_next;
             right.as_mut().unwrap().next = left;
             head.as_mut().unwrap().next = right;
+
             head = head.unwrap().next.as_mut().unwrap().next.as_mut();
         }
-        dummy_head.unwrap().next
+        result.unwrap().next
     }
 }
 
