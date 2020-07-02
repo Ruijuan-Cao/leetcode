@@ -37,7 +37,34 @@ pub struct Solution {}
 
 impl Solution {
     pub fn divide(dividend: i32, divisor: i32) -> i32 {
-        0
+        if divisor == 0 {
+            return std::i32::MAX;
+        }
+        let mut is_positive = false;
+        if (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0) {
+            is_positive = true;
+        }
+
+        let mut result = 0;
+        let mut dividend = (dividend as i64).abs();
+        let mut divisor = (divisor as i64).abs();
+        while dividend - divisor >= 0 {
+            let mut n = divisor;
+            let mut i = 1;
+            while dividend >= (n << 1) {
+                n <<= 1;
+                i <<= 1;
+            }
+            result += i;
+            dividend -= n;
+        }
+        if !is_positive {
+            result = -result;
+        }
+        if result > std::i32::MAX as i64 {
+            return std::i32::MAX;
+        }
+        result as i32
     }
 }
 
@@ -48,5 +75,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_29() {}
+    fn test_29() {
+        assert_eq!(Solution::divide(1, 1), 1);
+        assert_eq!(Solution::divide(10, 3), 3);
+        assert_eq!(Solution::divide(7, -3), -2);
+        assert_eq!(Solution::divide(std::i32::MIN, -1), std::i32::MAX);
+        assert_eq!(Solution::divide(std::i32::MIN, 1), std::i32::MIN);
+    }
 }
