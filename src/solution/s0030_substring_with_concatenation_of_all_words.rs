@@ -30,30 +30,6 @@ pub struct Solution {}
 // discuss: https://leetcode.com/problems/substring-with-concatenation-of-all-words/discuss/?currentPage=1&orderBy=most_votes&query=
 
 // submission codes start here
-struct Term {
-    expect: i32,
-    count: i32,
-}
-impl Term {
-    fn new(expect: i32, count: i32) -> Self {
-        Term { expect, count }
-    }
-    fn inc_expect(&mut self) {
-        self.expect += 1;
-    }
-    fn inc(&mut self) {
-        self.count += 1;
-    }
-    fn dec(&mut self) {
-        self.count -= 1;
-    }
-    fn exhausted(&self) -> bool {
-        self.count > self.expect
-    }
-    fn reset(&mut self) {
-        self.count = 0;
-    }
-}
 
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
@@ -68,7 +44,7 @@ impl Solution {
         let all_len = word_len * word_size;
         let mut result: Vec<i32> = Vec::new();
 
-        if s.len() - all_len > 0 {
+        if s.len() - all_len >= 0 {
             //init all word and count with 1
             let mut map: HashMap<&str, i32> = HashMap::with_capacity(word_size);
             words.iter().for_each(|w| {
@@ -124,6 +100,10 @@ mod tests {
 
     #[test]
     fn test_30() {
+        assert_eq!(
+            Solution::find_substring("a".to_string(), vec!["a".to_string()]),
+            vec![0]
+        );
         assert_eq!(
             Solution::find_substring(
                 "barfoothefoobarman".to_string(),

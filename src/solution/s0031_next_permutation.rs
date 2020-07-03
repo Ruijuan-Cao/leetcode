@@ -23,54 +23,36 @@ pub struct Solution {}
 
 impl Solution {
     pub fn next_permutation(nums: &mut Vec<i32>) {
+        //find the reverse index,max value
         let len = nums.len();
-        let mut i = (len - 1) as i32;
-        let mut prev = -1;
-        // find the decrement digit from end
+        let mut i = len - 1;
+        let mut pre = -1;
         while i >= 0 {
-            if nums[i as usize] < prev {
+            if nums[i] < pre {
+                break;
+            } else {
+                pre = nums[i];
+                if i > 0 {
+                    i -= 1;
+                } else {
+                    return nums.reverse();
+                }
+            }
+        }
+        //find value bigger than nums[i], swap and reverse
+        let mut j = len - 1;
+        while j > i {
+            if nums[j] > nums[i] {
+                nums.swap(i, j);
                 break;
             }
-            prev = nums[i as usize];
-            i -= 1;
+            j -= 1;
         }
-        let mut j = len - 1;
-        // find the first digit larger than nums[i]
-        // we can do binary search here to make a slightly improvement
-        if i >= 0 {
-            while j > (i as usize) {
-                if nums[j] > nums[i as usize] {
-                    nums.swap(i as usize, j);
-                    break;
-                }
-                j -= 1;
-            }
-        }
-        let slice = &mut nums[((i + 1) as usize)..len];
-        slice.reverse();
+        nums[(i + 1)..].reverse();
     }
 }
 
 // submission codes end
-
-/*
-// a clean solution (from leetcode submissions)
-impl Solution {
-    pub fn next_permutation(a: &mut Vec<i32>) {
-        let n = a.len();
-
-        if let Some(i) = (1..n).rev().find(|&i| a[i - 1] < a[i]) {
-            let j = (i..n).rev().find(|&j| a[i - 1] < a[j])
-                .unwrap();
-
-            a.swap(i - 1, j);
-            a[i..].reverse();
-        } else {
-            a.reverse();
-        }
-    }
-}
- */
 
 #[cfg(test)]
 mod tests {
@@ -85,5 +67,10 @@ mod tests {
         let mut vec2 = vec![5, 4, 3, 2, 1];
         Solution::next_permutation(&mut vec2);
         assert_eq!(vec2, vec![1, 2, 3, 4, 5]);
+
+        let mut vec2 = vec![1, 3, 2];
+        Solution::next_permutation(&mut vec2);
+        assert_eq!(vec2, vec![2, 1, 3]);
     }
+
 }
