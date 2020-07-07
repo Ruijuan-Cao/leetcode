@@ -30,71 +30,39 @@ pub struct Solution {}
 // time: O(N) space: O(1)
 impl Solution {
     pub fn longest_valid_parentheses2(s: String) -> i32 {
-        if s.len() < 2 {
+        let len = s.len();
+        if len < 2 {
             return 0;
         }
-        let mut stack = Vec::new();
-        let chars: Vec<char> = s.chars().collect();
-        let mut num = 0;
-        let mut pair_index = Vec::new();
-        for i in 0..s.len() {
-            if chars[i] == '(' {
-                stack.push('(');
-            } else {
-                match stack.last() {
-                    Some(ch) => {
-                        if *ch == '(' {
-                            stack.pop();
-                            num += 2;
-                            pair_index.push(i);
+        let mut dp = vec![0; len];
+        let mut max = 0;
+        for i in 1..len {
+            if s.chars().nth(i) == Some(')') {
+                if s.chars().nth(i - 1) == Some('(') {
+                    if i > 2 {
+                        dp[i] = dp[i - 2] + 2;
+                    } else {
+                        dp[i] = 2;
+                    }
+                } else {
+                    let pre_seq_start = i - dp[i - 1];
+                    if pre_seq_start > 0 && s.chars().nth(pre_seq_start - 1) == Some('(') {
+                        if pre_seq_start > 1 {
+                            dp[i] = dp[i - 1] + dp[pre_seq_start - 2] + 2;
                         } else {
-                            stack.push(')');
+                            dp[i] = dp[i - 1] + 2;
                         }
                     }
-                    None => {
-                        stack.push(')');
-                    }
+                }
+                if dp[i] > max {
+                    max = dp[i];
                 }
             }
         }
-        let size = pair_index.len();
-        if size < 1 {
-            return 0;
-        }
-
-        let mut continus_num = 0;
-        for i in 1..size {
-            if pair_index[i] - pair_index[i - 1] == 1 {
-                continus_num += 1;
-            }
-        }
-        // println!("{:?}:{:?}-{:?}", s, pair_index, continus_num);
-        let mut max_num = 0;
-        let mut cur_group_size = 1;
-        let mut cur_continus_num = continus_num;
-        let mut i = 1;
-        for i in 1..size {
-            let diff = pair_index[i] - pair_index[i - 1];
-            if diff == 1 {
-                continus_num -= 1;
-            }
-            // println!("{}-{}-{}", diff, continus_num, cur_continus_num);
-            if (continus_num > 0 && diff > 2 + continus_num) || (continus_num == 0 && diff > 2) {
-                max_num = max_num.max(cur_group_size);
-                cur_group_size = 1;
-                continus_num = cur_continus_num;
-            } else {
-                cur_group_size += 1;
-            }
-            // println!("--------{}-{}-{}", i, cur_group_size, max_num);
-        }
-
-        max_num = max_num.max(cur_group_size);
-
-        max_num as i32 * 2
+        max as i32
     }
 
-    pub fn longest_valid_parentheses(s: String) -> i32 {
+    pub fn longest_valid_parentheses_stack(s: String) -> i32 {
         let len = s.len();
         if len < 2 {
             return 0;
@@ -119,6 +87,54 @@ impl Solution {
             }
         }
         result
+    }
+
+    pub fn longest_valid_parentheses(s: String) -> i32 {
+        let len = s.len();
+        if len < 2 {
+            return 0;
+        }
+        let (mut left, mut right) = (0, 0);
+        let mut max = 0;
+        for i in 0..len {
+            if s.chars().nth(i) == Some('(') {
+                left += 1;
+            } else {
+                right += 1;
+            }
+            if left == right {
+                if left + right > max {
+                    max = left + right;
+                }
+            } else if right >= left {
+                left = 0;
+                right = 0;
+            }
+        }
+        left = 0;
+        right = 0;
+        let mut i = len - 1;
+        while i >= 0 {
+            if s.chars().nth(i) == Some('(') {
+                left += 1;
+            } else {
+                right += 1;
+            }
+            if left == right {
+                if left + right > max {
+                    max = left + right;
+                }
+            } else if left >= right {
+                left = 0;
+                right = 0;
+            }
+            if i == 0 {
+                break;
+            }
+            i -= 1;
+        }
+
+        max as i32
     }
 }
 
