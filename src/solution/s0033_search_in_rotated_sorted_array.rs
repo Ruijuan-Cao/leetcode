@@ -58,7 +58,11 @@ impl Solution {
                 if nums[mid] < target && target <= nums[right] {
                     left = mid + 1;
                 } else {
-                    right = mid - 1;
+                    if mid == 0 {
+                        right = 0;
+                    } else {
+                        right = mid - 1;
+                    }
                 }
             } else {
                 if nums[left] <= target && target < nums[mid] {
@@ -89,6 +93,8 @@ mod tests {
 
     #[test]
     fn test_33() {
+        assert_eq!(Solution::search(vec![1, 3], 0), -1);
+
         assert_eq!(Solution::search(vec![7, 8, 1, 2, 3, 4, 5, 6], 2), 3);
         assert_eq!(
             Solution::search(
