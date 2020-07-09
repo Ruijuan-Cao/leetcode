@@ -45,22 +45,24 @@ pub struct Solution {}
 use std::char::from_digit;
 impl Solution {
     pub fn count_and_say(n: i32) -> String {
-        let mut res = vec!['1'];
-        for _ in 0..n - 1 {
+        let mut result = vec!['1'];
+        for _ in 1..n {
             let mut temp = Vec::new();
-            let mut i = 0_usize;
-            while i < res.len() {
+            let mut i = 0;
+            while i < result.len() {
                 let mut j = i + 1;
-                while j < res.len() && res[j] == res[i] {
+                while j < result.len() && result[j] == result[i] {
                     j += 1;
+                    continue;
                 }
-                temp.push(from_digit((j - i) as u32, 10).unwrap());
-                temp.push(res[i]);
+                let count = (j - i) as u32;
+                temp.push(from_digit(count, 10).unwrap());
+                temp.push(result[i]);
                 i = j;
             }
-            res = temp;
+            result = temp;
         }
-        res.iter().collect()
+        result.iter().collect()
     }
 }
 

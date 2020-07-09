@@ -74,55 +74,56 @@ impl Solution {
     pub fn is_valid_sudoku(board: Vec<Vec<char>>) -> bool {
         let mut table = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         for row in board.iter() {
-            for z in 1..10 {
-                table[z] = 0;
+            for i in 0..10 {
+                table[i] = 0;
             }
             for ch in row {
                 match ch.to_digit(10) {
-                    None => continue,
-                    Some(idx) => {
-                        if table[idx as usize] > 0 {
+                    Some(index) => {
+                        if table[index as usize] > 0 {
                             return false;
                         } else {
-                            table[idx as usize] = 1
+                            table[index as usize] = 1;
                         }
                     }
+                    None => continue,
                 }
             }
         }
         for i in 0..9 {
-            for z in 1..10 {
-                table[z] = 0;
+            for j in 1..10 {
+                table[j] = 0;
             }
             for row in board.iter() {
                 match row[i].to_digit(10) {
-                    None => continue,
-                    Some(idx) => {
-                        if table[idx as usize] > 0 {
+                    Some(index) => {
+                        if table[index as usize] > 0 {
                             return false;
                         } else {
-                            table[idx as usize] = 1
+                            table[index as usize] = 1;
                         }
                     }
+                    None => continue,
                 }
             }
         }
+
         for i in 0..3 {
             for j in 0..3 {
-                for z in 1..10 {
-                    table[z] = 0;
+                for k in 0..10 {
+                    table[k] = 0;
                 }
                 for row in 3 * i..3 * (i + 1) {
                     for column in 3 * j..3 * (j + 1) {
                         match board[row][column].to_digit(10) {
-                            None => continue,
-                            Some(idx) => {
-                                if table[idx as usize] > 0 {
+                            Some(index) => {
+                                if table[index as usize] > 0 {
                                     return false;
                                 } else {
-                                    table[idx as usize] = 1
+                                    table[index as usize] = 1;
                                 }
                             }
+                            None => continue,
                         }
                     }
                 }
