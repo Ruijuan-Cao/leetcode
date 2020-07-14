@@ -41,24 +41,25 @@ impl Solution {
         let mut nums = nums;
         let len = nums.len();
         let mut i = 0;
-        let mut c = 0;
         while i < len {
             let num = nums[i];
-            if num > 0 && num - 1 < (len as i32) {
-                c += 1;
+            //if valid num, swap to current location(num-1)
+            if num > 0 && num - 1 < len as i32 {
                 nums.swap((num - 1) as usize, i);
-                if (num - 1) > (i as i32) && (num != nums[i]) {
+                //if changed and swap an unknown num, not i++, just continue
+                if num != nums[i] && num - 1 > i as i32 {
                     continue;
                 }
             }
             i += 1;
         }
-        println!("{}", c);
-        for (i, &num) in nums.iter().enumerate() {
-            if num != ((i + 1) as i32) {
+
+        for i in 0..len {
+            if nums[i] != (i + 1) as i32 {
                 return (i + 1) as i32;
             }
         }
+
         return (len + 1) as i32;
     }
 }

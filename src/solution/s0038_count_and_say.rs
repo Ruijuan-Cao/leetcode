@@ -51,12 +51,11 @@ impl Solution {
             let mut i = 0;
             while i < result.len() {
                 let mut j = i + 1;
-                while j < result.len() && result[j] == result[i] {
+                while j < result.len() && result[i] == result[j] {
                     j += 1;
-                    continue;
                 }
-                let count = (j - i) as u32;
-                temp.push(from_digit(count, 10).unwrap());
+                let ch = from_digit((j - i) as u32, 10).unwrap();
+                temp.push(ch);
                 temp.push(result[i]);
                 i = j;
             }

@@ -45,32 +45,32 @@ pub struct Solution {}
 
 impl Solution {
     pub fn combination_sum(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
-        let mut seq = candidates;
-        let mut res = Vec::new();
-        seq.sort_unstable_by(|a, b| b.cmp(a));
-        let mut vec = Vec::new();
-        Solution::backtrack(&seq, target, vec, &mut res, 0);
-        res
+        let mut candidates = candidates;
+        let mut result = Vec::new();
+        let mut temp = Vec::new();
+        Self::backtrack(&candidates, target, 0, temp, &mut result);
+        // seq.sort_unstable_by(|a, b| b.cmp(a));
+        result
     }
 
-    fn backtrack(
-        seq: &Vec<i32>,
+    pub fn backtrack(
+        candidates: &Vec<i32>,
         target: i32,
-        mut curr: Vec<i32>,
+        begin: usize,
+        mut temp: Vec<i32>,
         result: &mut Vec<Vec<i32>>,
-        start_idx: usize,
     ) {
-        for i in start_idx..seq.len() {
-            let item = seq[i];
-            if target - item < 0 {
-                continue;
-            }
-            let mut new_vec = curr.clone();
-            new_vec.push(item);
-            if target == item {
-                result.push(new_vec);
-            } else {
-                Solution::backtrack(seq, target - item, new_vec, result, i);
+        if target < 0 {
+            return;
+        } else if target == 0 {
+            result.push(temp);
+            return;
+        } else {
+            for i in begin..candidates.len() {
+                temp.push(candidates[i]);
+                let temp_copy = temp.clone();
+                Self::backtrack(candidates, target - candidates[i], i, temp_copy, result);
+                temp.pop();
             }
         }
     }

@@ -38,21 +38,46 @@ use std::char::from_digit;
 use std::collections::VecDeque;
 impl Solution {
     pub fn multiply(num1: String, num2: String) -> String {
-        let mut num1: Vec<u32> = num1.chars().map(|ch| ch.to_digit(10).unwrap()).collect();
-        let mut num2: Vec<u32> = num2.chars().map(|ch| ch.to_digit(10).unwrap()).collect();
-        let mut buffer = VecDeque::with_capacity(num2.len() + 1);
-        let mut res: Vec<char> = Vec::new();
-        let mut carry = 0_u32;
+        let mut num1: Vec<u32> = num1.chars().map(|c| c.to_digit(10).unwrap()).collect();
+        let mut num2: Vec<u32> = num2.chars().map(|c| c.to_digit(10).unwrap()).collect();
+
+        // let mut result = Vec::new();
+        let mut overflow = 0;
         num1.reverse();
         num2.reverse();
-        for (i, multiplier) in num1.into_iter().enumerate() {
-            buffer
-                .pop_back()
-                .and_then(|digit| Some(res.push(from_digit(digit, 10).unwrap())));
-            for &multiplicand in num2.iter() {}
+
+        let mut res = 0;
+        let mut temp: VecDeque<u32> = VecDeque::with_capacity(num2.len() + 1);
+        let mut n10 = 1;
+        for (i, multiplier) in num1.iter().enumerate() {
+            overflow = 0;
+            for &multiplicand in num2.iter() {
+                let num = multiplicand * multiplier + overflow;
+                if num >= 10 {
+                    overflow = num / 10;
+                } else {
+                    overflow = 0;
+                }
+                temp.push_back(num % 10);
+            }
+            if overflow > 0 {
+                temp.push_back(overflow);
+            }
+            let mut temp_num = 0;
+            while temp.len() > 0 {
+                temp.pop_back()
+                    .map(|digit| temp_num = temp_num * 10 + digit);
+            }
+
+            if n10 == 1 {
+                res += temp_num;
+            } else {
+                res += temp_num * n10 as u32;
+            }
+            n10 *= 10;
         }
-        res.reverse();
-        res.into_iter().collect()
+
+        res.to_string()
     }
 }
 
@@ -63,5 +88,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_43() {}
+    fn test_43() {
+        assert_eq!(Solution::multiply("2".to_string(), "3".to_string()), "6");
+        assert_eq!(
+            Solution::multiply("123".to_string(), "456".to_string()),
+            "56088"
+        );
+    }
 }
