@@ -94,5 +94,9 @@ mod tests {
             Solution::multiply("123".to_string(), "456".to_string()),
             "56088"
         );
+        assert_eq!(
+            Solution::multiply("123456789".to_string(), "987654321".to_string()),
+            "121932631112635269"
+        );
     }
 }
