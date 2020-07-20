@@ -26,7 +26,7 @@ pub struct Solution {}
 impl Solution {
     pub fn permute_unique(nums: Vec<i32>) -> Vec<Vec<i32>> {
         let mut nums = nums;
-        nums.sort_unstable();
+        nums.sort();
         Solution::permute(nums)
     }
 
@@ -35,16 +35,17 @@ impl Solution {
             return vec![nums];
         }
         let mut prev: Option<i32> = None;
-        let mut res = Vec::new();
+        let mut result = Vec::new();
         for (i, &num) in nums.iter().enumerate() {
             if prev.is_some() && prev.unwrap() == num {
                 continue;
             } else {
-                prev = Some(num)
+                prev = Some(num);
             }
+
             let mut sub = nums.clone();
             sub.remove(i);
-            let mut permutations: Vec<Vec<i32>> = Solution::permute(sub)
+            let mut temp: Vec<Vec<i32>> = Solution::permute(sub)
                 .into_iter()
                 .map(|x| {
                     let mut x = x;
@@ -52,9 +53,9 @@ impl Solution {
                     x
                 })
                 .collect();
-            res.append(&mut permutations);
+            result.append(&mut temp);
         }
-        res
+        result
     }
 }
 

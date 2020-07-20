@@ -32,14 +32,16 @@ pub struct Solution {}
 use std::collections::HashMap;
 impl Solution {
     pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
-        let mut map = HashMap::new();
-        for s in strs.into_iter() {
-            let mut key = [0; 26];
+        let mut map: HashMap<Vec<usize>, Vec<String>> = HashMap::new();
+        for s in strs.iter() {
+            let mut key = vec![0; 26];
             for ch in s.chars() {
-                key[(ch as u32 - 'a' as u32) as usize] += 1;
+                let index = (ch as usize) - ('a' as usize);
+                key[index] += 1;
             }
-            map.entry(key).or_insert(Vec::new()).push(s);
+            map.entry(key).or_insert(Vec::new()).push(s.to_string());
         }
+
         map.into_iter().map(|(_, v)| v).collect()
     }
 }
@@ -53,14 +55,21 @@ mod tests {
     use std::collections::HashSet;
     // TODO: implement arbitrary match macro
     #[test]
-    #[ignore]
+    // #[ignore]
     fn test_49() {
         assert_eq!(
-            Solution::group_anagrams(vec_string!["eat", "tea", "tan", "ate", "nat", "bat"]),
+            Solution::group_anagrams(vec![
+                "eat".to_string(),
+                "tea".to_string(),
+                "tan".to_string(),
+                "ate".to_string(),
+                "nat".to_string(),
+                "bat".to_string()
+            ]),
             vec![
-                vec_string!["tan", "nat"],
-                vec_string!["bat"],
-                vec_string!["eat", "ate", "tea"],
+                vec!["tan".to_string(), "nat".to_string()],
+                vec!["bat".to_string()],
+                vec!["eat".to_string(), "ate".to_string(), "tea".to_string()],
             ]
         );
     }

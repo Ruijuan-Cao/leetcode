@@ -37,55 +37,57 @@ pub struct Solution {}
 
 impl Solution {
     pub fn solve_n_queens(n: i32) -> Vec<Vec<String>> {
-        let mut board = vec![vec!['.'; n as usize]; n as usize];
-        let mut solution = Vec::new();
-        Solution::schedule_queens(&mut board, &mut solution, n as usize, 0);
-        solution
+        if n <= 0 {
+            return Vec::new();
+        }
+        let n = n as usize;
+        let mut result = Vec::new();
+        let mut cur = vec![vec!['.'; n]; n];
+        Self::solve(n, 0, &mut cur, &mut result);
+        result
     }
-
-    fn schedule_queens(
-        board: &mut Vec<Vec<char>>,
-        solution: &mut Vec<Vec<String>>,
-        len: usize,
-        row: usize,
-    ) {
-        for col in 0..len {
-            if !Solution::collision(&board, len, row, col) {
-                board[row][col] = 'Q';
-                if row == len - 1 {
-                    solution.push(board.iter().map(|vec| vec.iter().collect()).collect());
-                } else {
-                    Solution::schedule_queens(board, solution, len, row + 1);
+    pub fn solve(n: usize, row: usize, cur: &mut Vec<Vec<char>>, result: &mut Vec<Vec<String>>) {
+        for col in 0..n {
+            let mut valid = true;
+            //check valid
+            for i in 0..row {
+                if cur[i][col] == 'Q' {
+                    valid = false;
+                    break;
                 }
-                board[row][col] = '.';
             }
-        }
-    }
+            let mut i = row as i32 - 1;
+            let mut j = col as i32 - 1;
+            while i >= 0 && j >= 0 {
+                if cur[i as usize][j as usize] == 'Q' {
+                    valid = false;
+                    break;
+                }
+                i -= 1;
+                j -= 1;
+            }
 
-    #[inline(always)]
-    fn collision(board: &Vec<Vec<char>>, len: usize, x: usize, y: usize) -> bool {
-        for i in 0..x {
-            if board[i][y] == 'Q' {
-                return true;
+            let mut i = row as i32 - 1;
+            let mut j = col + 1;
+            while i >= 0 && j < n {
+                if cur[i as usize][j] == 'Q' {
+                    valid = false;
+                    break;
+                }
+                i -= 1;
+                j += 1;
+            }
+
+            if valid {
+                cur[row][col] = 'Q';
+                if row == n - 1 {
+                    result.push(cur.iter().map(|vec| vec.iter().collect()).collect());
+                } else {
+                    Self::solve(n, row + 1, cur, result);
+                }
+                cur[row][col] = '.';
             }
         }
-        let (mut i, mut j) = (x as i32 - 1, y as i32 - 1);
-        while i >= 0 && j >= 0 {
-            if board[i as usize][j as usize] == 'Q' {
-                return true;
-            }
-            i -= 1;
-            j -= 1;
-        }
-        let (mut i, mut j) = (x as i32 - 1, y as i32 + 1);
-        while i >= 0 && j < len as i32 {
-            if board[i as usize][j as usize] == 'Q' {
-                return true;
-            }
-            i -= 1;
-            j += 1;
-        }
-        false
     }
 }
 

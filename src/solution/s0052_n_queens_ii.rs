@@ -36,50 +36,57 @@ pub struct Solution {}
 
 impl Solution {
     pub fn total_n_queens(n: i32) -> i32 {
-        let mut board = vec![vec!['.'; n as usize]; n as usize];
+        if n <= 0 {
+            return 0;
+        }
+        let n = n as usize;
         let mut num = 0;
-        Solution::schedule_queens(&mut board, &mut num, n as usize, 0);
+        let mut cur = vec![vec!['.'; n]; n];
+        Self::solve(n, 0, &mut cur, &mut num);
         num
     }
+    pub fn solve(n: usize, row: usize, cur: &mut Vec<Vec<char>>, num: &mut i32) {
+        for col in 0..n {
+            let mut valid = true;
+            //check valid
+            for i in 0..row {
+                if cur[i][col] == 'Q' {
+                    valid = false;
+                    break;
+                }
+            }
+            let mut i = row as i32 - 1;
+            let mut j = col as i32 - 1;
+            while i >= 0 && j >= 0 {
+                if cur[i as usize][j as usize] == 'Q' {
+                    valid = false;
+                    break;
+                }
+                i -= 1;
+                j -= 1;
+            }
 
-    fn schedule_queens(board: &mut Vec<Vec<char>>, num: &mut i32, len: usize, row: usize) {
-        for col in 0..len {
-            if !Solution::collision(&board, len, row, col) {
-                board[row][col] = 'Q';
-                if row == len - 1 {
+            let mut i = row as i32 - 1;
+            let mut j = col + 1;
+            while i >= 0 && j < n {
+                if cur[i as usize][j] == 'Q' {
+                    valid = false;
+                    break;
+                }
+                i -= 1;
+                j += 1;
+            }
+
+            if valid {
+                cur[row][col] = 'Q';
+                if row == n - 1 {
                     *num += 1;
                 } else {
-                    Solution::schedule_queens(board, num, len, row + 1);
+                    Self::solve(n, row + 1, cur, num);
                 }
-                board[row][col] = '.';
+                cur[row][col] = '.';
             }
         }
-    }
-
-    #[inline(always)]
-    fn collision(board: &Vec<Vec<char>>, len: usize, x: usize, y: usize) -> bool {
-        for i in 0..x {
-            if board[i][y] == 'Q' {
-                return true;
-            }
-        }
-        let (mut i, mut j) = (x as i32 - 1, y as i32 - 1);
-        while i >= 0 && j >= 0 {
-            if board[i as usize][j as usize] == 'Q' {
-                return true;
-            }
-            i -= 1;
-            j -= 1;
-        }
-        let (mut i, mut j) = (x as i32 - 1, y as i32 + 1);
-        while i >= 0 && j < len as i32 {
-            if board[i as usize][j as usize] == 'Q' {
-                return true;
-            }
-            i -= 1;
-            j += 1;
-        }
-        false
     }
 }
 
@@ -94,6 +101,6 @@ mod tests {
         assert_eq!(Solution::total_n_queens(4), 2);
         assert_eq!(Solution::total_n_queens(8), 92);
         assert_eq!(Solution::total_n_queens(13), 73712);
-        // assert_eq!(Solution::total_n_queens(14), 365596);
+        assert_eq!(Solution::total_n_queens(14), 365596);
     }
 }

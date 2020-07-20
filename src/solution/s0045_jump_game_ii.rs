@@ -30,7 +30,20 @@ pub struct Solution {}
 // TODO: shortest path from backward
 impl Solution {
     pub fn jump(nums: Vec<i32>) -> i32 {
-        0
+        let (mut pre, mut cur) = (-1i32, 0i32);
+        let mut step = 0;
+        for i in 0..nums.len() as i32 {
+            if cur >= nums.len() as i32 - 1 {
+                return step;
+            } else if pre < i as i32 && i <= cur {
+                step += 1;
+                pre = cur;
+            }
+            if i + nums[i as usize] > cur {
+                cur = i + nums[i as usize];
+            }
+        }
+        step
     }
 }
 
@@ -41,5 +54,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_45() {}
+    fn test_45() {
+        assert_eq!(Solution::jump(vec![2, 3, 1, 1, 4]), 2);
+    }
 }

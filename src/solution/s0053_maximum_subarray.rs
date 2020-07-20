@@ -25,14 +25,15 @@ pub struct Solution {}
 
 impl Solution {
     pub fn max_sub_array(nums: Vec<i32>) -> i32 {
-        let mut j = 0_usize;
-        let mut max = i32::min_value();
-        let mut curr = 0;
-        for j in 0..nums.len() {
-            curr += nums[j];
-            max = i32::max(max, curr);
-            if curr <= 0 {
-                curr = 0;
+        let mut max = std::i32::MIN;
+        let mut cur = 0;
+        for i in 0..nums.len() {
+            cur += nums[i];
+            if cur > max {
+                max = cur;
+            }
+            if cur < 0 {
+                cur = 0;
             }
         }
         max

@@ -76,7 +76,23 @@ pub struct Solution {}
 
 impl Solution {
     pub fn is_match(s: String, p: String) -> bool {
-        false
+        let s: Vec<char> = s.chars().collect();
+        let p: Vec<char> = p.chars().collect();
+
+        //result[i][j]-if s[0..i] and p[0..j] match
+        let mut result = vec![vec![false; p.len() + 1]; s.len() + 1];
+        result[0][0] = true;
+        for i in 0..s.len() + 1 {
+            for j in 1..p.len() + 1 {
+                if p[j - 1] == '*' {
+                    result[i][j] = result[i][j - 1] || (i > 0 && result[i - 1][j]);
+                } else {
+                    result[i][j] =
+                        i > 0 && result[i - 1][j - 1] && (s[i - 1] == p[j - 1] || p[j - 1] == '?');
+                }
+            }
+        }
+        result[s.len()][p.len()]
     }
 }
 
@@ -87,5 +103,20 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_44() {}
+    fn test_44() {
+        assert_eq!(Solution::is_match("aa".to_string(), "a".to_string()), false);
+        assert_eq!(Solution::is_match("aa".to_string(), "*".to_string()), true);
+        assert_eq!(
+            Solution::is_match("cb".to_string(), "?a".to_string()),
+            false
+        );
+        assert_eq!(
+            Solution::is_match("adceb".to_string(), "*a*b".to_string()),
+            true
+        );
+        assert_eq!(
+            Solution::is_match("acdcb".to_string(), "a*c?b".to_string()),
+            false
+        );
+    }
 }

@@ -42,7 +42,51 @@ pub struct Solution {}
 
 impl Solution {
     pub fn my_pow(x: f64, n: i32) -> f64 {
-        x.powi(n)
+        let mut m = n;
+        if n < 0 {
+            m = -n - 1;
+        }
+
+        let mut p = 1.0;
+        let mut q = x;
+        while m > 0 {
+            if m & 1 != 0 {
+                p *= q;
+            }
+            q *= q;
+            m = m / 2;
+        }
+
+        if n < 0 {
+            return 1.0 / p / x;
+        } else {
+            return p;
+        }
+    }
+    pub fn my_pow_overtime(x: f64, n: i32) -> f64 {
+        if x <= -100.0 || x >= 100.0 {
+            return 0.0;
+        }
+        if n == 0 {
+            return 1.0;
+        }
+        let mut result = 1.0;
+        let mut n = n;
+        let mut negtive = false;
+        if n < 0 {
+            n = -n;
+            negtive = true;
+        }
+
+        for _ in 0..n {
+            result *= x;
+        }
+        if negtive {
+            return 1.0 / result;
+        } else {
+            return result;
+        }
+        // x.powi(n)
     }
 }
 

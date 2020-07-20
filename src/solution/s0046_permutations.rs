@@ -36,10 +36,10 @@ impl Solution {
                 let mut sub = nums.clone().into_iter().filter(|&x| x != num).collect();
                 Solution::permute(sub)
                     .into_iter()
-                    .map(|vec| {
-                        let mut vec = vec;
-                        vec.push(num);
-                        vec
+                    .map(|seq| {
+                        let mut seq = seq;
+                        seq.push(num);
+                        seq
                     })
                     .collect::<Vec<Vec<i32>>>()
             })

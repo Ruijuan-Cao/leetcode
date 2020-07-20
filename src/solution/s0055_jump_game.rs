@@ -34,13 +34,22 @@ pub struct Solution {}
 
 impl Solution {
     pub fn can_jump(nums: Vec<i32>) -> bool {
-        let mut max_idx = 0_usize;
-        let mut start = 0_usize;
-        while start < nums.len() && start <= max_idx {
-            max_idx = usize::max(start + nums[start] as usize, max_idx);
-            start += 1;
+        let mut cur = 0;
+        let mut i = 0;
+        while i < nums.len() && i <= cur {
+            if cur >= nums.len() - 1 {
+                return true;
+            }
+            if i + nums[i] as usize > cur {
+                cur = i + nums[i] as usize;;
+            }
+            i += 1;
         }
-        return max_idx >= (nums.len() - 1);
+        if cur >= nums.len() - 1 {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
