@@ -23,19 +23,16 @@ pub struct Solution {}
 
 impl Solution {
     pub fn length_of_last_word(s: String) -> i32 {
-        let seq: Vec<char> = s.chars().rev().collect();
-        let mut result = 0;
-        let mut find = false;
-        for ch in seq {
-            if ch == ' ' && find {
-                break;
-            }
-            if ch != ' ' {
-                find = true;
-                result += 1;
-            }
+        let mut s = s.trim();
+        if s.len() < 1 {
+            return 0;
         }
-        result
+        let chars: Vec<char> = s.trim().chars().collect();
+        let mut i = chars.len() as i32 - 1;
+        while i >= 0 && chars[i as usize] != ' ' {
+            i -= 1;
+        }
+        chars.len() as i32 - 1 - i
     }
 }
 

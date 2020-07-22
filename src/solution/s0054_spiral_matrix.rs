@@ -43,7 +43,6 @@ impl Solution {
         loop {
             for y in y_min..y_max {
                 result.push(matrix[x_min][y]);
-                println!("1:{}-{}-{:?}", x_min, y, result);
             }
             x_min += 1;
             if x_min == x_max {
@@ -52,17 +51,15 @@ impl Solution {
 
             for x in x_min..x_max {
                 result.push(matrix[x][y_max - 1]);
-                println!("2:{}-{}-{:?}", x, y_max - 1, result);
             }
             y_max -= 1;
             if y_min == y_max {
                 break;
             }
 
-            let mut y = y_max - 1;
-            while y >= y_min {
-                result.push(matrix[x_max - 1][y]);
-                println!("3:{}-{}-{:?}", x_max - 1, y, result);
+            let mut y = y_max as i32 - 1;
+            while y >= y_min as i32 {
+                result.push(matrix[x_max - 1][y as usize]);
                 y -= 1;
             }
             x_max -= 1;
@@ -73,7 +70,6 @@ impl Solution {
             let mut x = x_max - 1;
             while x >= x_min {
                 result.push(matrix[x][y_min]);
-                println!("4:{}-{}-{:?}", x, y_min, result);
                 x -= 1;
             }
             y_min += 1;

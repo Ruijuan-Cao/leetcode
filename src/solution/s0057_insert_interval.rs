@@ -42,7 +42,7 @@ impl Interval {
 }
 impl Solution {
     pub fn insert(intervals: Vec<Interval>, new_interval: Interval) -> Vec<Interval> {
-        let mut result = Vec::new();
+        let mut result: Vec<Interval> = Vec::new();
         let mut new_interval = new_interval;
         let mut inserting = false;
         let mut inserted = false;
@@ -67,6 +67,7 @@ impl Solution {
         if !inserted {
             result.push(new_interval);
         }
+
         result
     }
 }

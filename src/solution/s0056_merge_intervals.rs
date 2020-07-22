@@ -42,13 +42,16 @@ impl Interval {
 impl Solution {
     pub fn merge(intervals: Vec<Interval>) -> Vec<Interval> {
         let mut intervals = intervals;
-        intervals.sort_unstable_by_key(|interval| interval.start);
+        intervals.sort_by_key(|interval| interval.start);
+
         let mut result: Vec<Interval> = Vec::new();
         for interval in intervals.into_iter() {
             match result.last_mut() {
-                Some(mut last_inter) => {
-                    if last_inter.end >= interval.start {
-                        last_inter.end = i32::max(last_inter.end, interval.end);
+                Some(last) => {
+                    if last.end > interval.start {
+                        if interval.end > last.end {
+                            last.end = interval.end;
+                        }
                         continue;
                     }
                 }

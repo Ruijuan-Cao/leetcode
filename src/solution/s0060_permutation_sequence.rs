@@ -49,19 +49,22 @@ pub struct Solution {}
 use std::char::from_digit;
 impl Solution {
     pub fn get_permutation(n: i32, k: i32) -> String {
-        let factorials = [0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
-        let mut k = k;
-        let mut i = n;
-        let mut res = String::new();
-        while i > 0 {
-            if k > factorials[i as usize] {
-                let round = k / factorials[i as usize];
-                if round >= n {}
-            } else {
-                i -= 1;
-            }
+        let mut result = String::new();
+
+        let mut nums: Vec<char> = "123456789".chars().collect();
+        let mut fac = vec![1 as i32; n as usize];
+        for i in 1..n {
+            fac[i as usize] = fac[i as usize - 1] * i;
         }
-        res
+        let mut k = k;
+        k -= 1;
+        for i in (1..n + 1).rev() {
+            let j = k / fac[i as usize - 1];
+            k %= fac[i as usize - 1];
+            result.push(nums[j as usize]);
+            nums.remove(j as usize);
+        }
+        result
     }
 }
 
@@ -72,5 +75,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_60() {}
+    fn test_60() {
+        assert_eq!(Solution::get_permutation(3, 3), "213");
+        // assert_eq!(Solution::get_permutation(4, 9), "2314");
+    }
 }
