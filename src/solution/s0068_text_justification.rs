@@ -68,6 +68,7 @@
  *
  */
 pub struct Solution {}
+use crate::util::vec_string;
 
 // problem: https://leetcode.com/problems/text-justification/
 // discuss: https://leetcode.com/problems/text-justification/discuss/?currentPage=1&orderBy=most_votes&query=
@@ -103,7 +104,7 @@ impl Solution {
     fn compact(words: Vec<String>, max_width: usize, row_len: usize) -> String {
         let spaces = max_width - (row_len - words.len() + 1);
         let avg_spaces = spaces / usize::max(1, words.len() - 1);
-        let mut extra_spaces = spaces - avg_spaces * usize::max(1, words.len() - 1);;
+        let mut extra_spaces = spaces - avg_spaces * usize::max(1, words.len() - 1);
         let mut res = String::new();
         for (i, word) in words.iter().enumerate() {
             res.push_str(word);

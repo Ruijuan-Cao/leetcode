@@ -35,7 +35,40 @@ use crate::util::linked_list::{to_list, ListNode};
 
 impl Solution {
     pub fn rotate_right(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
-        None
+        if head.is_none() || k < 1 {
+            return head;
+        }
+
+        //get len
+        let mut len = 0;
+        let mut ptr = head.as_ref();
+        while let Some(node) = ptr {
+            len += 1;
+            ptr = node.next.as_ref();
+        }
+
+        let loc = len - k % len;
+        if loc == len {
+            return head;
+        }
+
+        let mut head = head;
+        let mut ptr = head.as_mut().unwrap();
+        for _ in 1..loc {
+            ptr = ptr.next.as_mut().unwrap();
+        }
+
+        let mut new_head = ptr.next.take();
+        let mut ptr = new_head.as_mut();
+        while let Some(node) = ptr {
+            if node.next.is_none() {
+                ptr = Some(node);
+                break;
+            }
+            ptr = node.next.as_mut();
+        }
+        ptr.unwrap().next = head;
+        new_head
     }
 }
 
@@ -46,5 +79,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_61() {}
+    fn test_61() {
+        assert_eq!(
+            Solution::rotate_right(linked![1, 2, 3, 4, 5], 2),
+            linked![4, 5, 1, 2, 3]
+        );
+
+        assert_eq!(
+            Solution::rotate_right(linked![0, 1, 2], 4),
+            linked![2, 0, 1]
+        );
+    }
 }
