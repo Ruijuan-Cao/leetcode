@@ -45,7 +45,48 @@ pub struct Solution {}
 // TODO: NFA
 impl Solution {
     pub fn is_number(s: String) -> bool {
-        false
+        let mut s = s.trim();
+        println!("{:?}", s);
+        let mut chars: Vec<char> = s.chars().collect();
+        let mut digit = false;
+        let mut dot = false;
+        let mut signal = false;
+        let mut e = false;
+        let mut last = chars[0];
+
+        for i in 0..chars.len() {
+            if chars[i] >= '0' && chars[i] <= '9' {
+                digit = true;
+            } else if chars[i] == '.' {
+                if digit == false {
+                    return false;
+                }
+                if e {
+                    return false;
+                }
+                dot = true;
+            } else if chars[i] == '+' || chars[i] == '-' {
+                if signal || dot {
+                    return false;
+                }
+                if (digit || e) && last != 'e' {
+                    return false;
+                }
+                signal = true;
+            } else if chars[i] == 'e' {
+                if !digit {
+                    return false;
+                }
+                e = true;
+            } else {
+                return false;
+            }
+            last = chars[i];
+        }
+        if last == 'e' || last == '+' || last == '-' || last == '.' {
+            return false;
+        }
+        true
     }
 }
 
@@ -56,5 +97,20 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_65() {}
+    fn test_65() {
+        assert_eq!(Solution::is_number("0".to_string()), true);
+        assert_eq!(Solution::is_number(" 0.1".to_string()), true);
+        assert_eq!(Solution::is_number("abc".to_string()), false);
+        assert_eq!(Solution::is_number("1 a".to_string()), false);
+        assert_eq!(Solution::is_number("2e10".to_string()), true);
+        assert_eq!(Solution::is_number(" -90e3".to_string()), true);
+        assert_eq!(Solution::is_number("1e".to_string()), false);
+        assert_eq!(Solution::is_number("e3".to_string()), false);
+        assert_eq!(Solution::is_number(" 6e-1".to_string()), true);
+        assert_eq!(Solution::is_number(" 99e2.5".to_string()), false);
+        assert_eq!(Solution::is_number("53.5e93".to_string()), true);
+        assert_eq!(Solution::is_number(" --6 ".to_string()), false);
+        assert_eq!(Solution::is_number("-+3".to_string()), false);
+        assert_eq!(Solution::is_number("95a54e53".to_string()), false);
+    }
 }

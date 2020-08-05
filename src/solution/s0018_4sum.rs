@@ -48,8 +48,11 @@ impl Solution {
                 // if result.len() > 0 && j > 0 && nums[j] == nums[j - 1]  {
                 //     continue;
                 // }
-                if result.len() > 0 && result[result.len()-1][0] == nums[i] && result[result.len()-1][1] == nums[j]{
-                    continue;          
+                if result.len() > 0
+                    && result[result.len() - 1][0] == nums[i]
+                    && result[result.len() - 1][1] == nums[j]
+                {
+                    continue;
                 }
                 let mut x = j + 1;
                 let mut y = nums.len() - 1;
@@ -94,8 +97,8 @@ mod tests {
         );
         assert_eq!(Solution::four_sum(vec![0, 0, 0, 0], 0), vec![[0, 0, 0, 0]]);
         assert_eq!(
-            Solution::four_sum(vec![-1,0,1,2,-1,-4], -1),
-            vec![[-3, -1, 0, 5]]
+            Solution::four_sum(vec![-1, 0, 1, 2, -1, -4], -1),
+            vec![vec![-4, 0, 1, 2], vec![-1, -1, 0, 1]]
         );
     }
 }

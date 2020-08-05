@@ -101,10 +101,10 @@ mod tests {
     #[test]
     fn test_22() {
         assert_eq!(Solution::generate_parenthesis2(1), vec!["()"]);
-        assert_eq!(Solution::generate_parenthesis2(2), vec!["(())", "()()"]);
+        assert_eq!(Solution::generate_parenthesis2(2), vec!["()()", "(())"]);
         assert_eq!(
             Solution::generate_parenthesis2(3),
-            vec!["((()))", "(()())", "(())()", "()(())", "()()()"]
+            vec!["()()()", "(()())", "()(())", "(())()", "((()))"]
         );
     }
 }

@@ -41,11 +41,13 @@ pub struct Solution {}
 // Bottom-Up DP
 impl Solution {
     pub fn unique_paths_with_obstacles(obstacle_grid: Vec<Vec<i32>>) -> i32 {
-        let (height, width) = (obstacle_grid.len(), obstacle_grid[0].len());
-        let mut paths: Vec<Vec<i32>> = vec![vec![0; width]; height];
+        let height = obstacle_grid.len();
+        let width = obstacle_grid[0].len();
+        let mut paths = vec![vec![0; width]; height];
         if obstacle_grid[0][0] != 1 {
             paths[0][0] = 1;
         }
+
         let mut step = 1;
         while step <= height + width - 2 {
             for x in 0..(step + 1) {
@@ -53,11 +55,11 @@ impl Solution {
                 if x >= height || y >= width || obstacle_grid[x][y] == 1 {
                     continue;
                 }
-                if y >= 1 {
-                    paths[x][y] = paths[x][y] + paths[x][y - 1];
+                if y > 0 {
+                    paths[x][y] += paths[x][y - 1];
                 }
-                if x >= 1 {
-                    paths[x][y] = paths[x][y] + paths[x - 1][y];
+                if x > 0 {
+                    paths[x][y] += paths[x - 1][y];
                 }
             }
             step += 1;

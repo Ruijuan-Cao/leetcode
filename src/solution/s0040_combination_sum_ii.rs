@@ -48,7 +48,6 @@ impl Solution {
     pub fn combination_sum2(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
         let mut candidates = candidates;
         candidates.sort();
-        println!("{:?}", candidates);
         let mut result = Vec::new();
         let mut temp = Vec::new();
         Self::backtrack(&candidates, target, 0, temp, &mut result);
@@ -94,11 +93,11 @@ mod tests {
         );
         assert_eq!(
             Solution::combination_sum2(vec![10, 1, 2, 7, 6, 1, 5], 8),
-            vec![vec![7, 1], vec![6, 2], vec![6, 1, 1], vec![5, 2, 1],]
+            vec![vec![1, 1, 6], vec![1, 2, 5], vec![1, 7], vec![2, 6]]
         );
         assert_eq!(
             Solution::combination_sum2(vec![2, 5, 2, 1, 2], 5),
-            vec![vec![5], vec![2, 2, 1],]
+            vec![vec![1, 2, 2], vec![5]]
         );
     }
 }

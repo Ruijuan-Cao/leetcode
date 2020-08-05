@@ -150,7 +150,7 @@ impl Solution {
         let p: Vec<char> = p.chars().collect();
 
         //result[i][j]-if s[0..i] and p[0..j] match
-        let mut result = vec![vec![false; s.len() + 1]; p.len() + 1];
+        let mut result = vec![vec![false; p.len() + 1]; s.len() + 1];
         result[0][0] = true;
         for i in 0..s.len() + 1 {
             for j in 1..p.len() + 1 {

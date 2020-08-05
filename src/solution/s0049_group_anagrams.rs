@@ -69,7 +69,7 @@ mod tests {
             vec![
                 vec!["tan".to_string(), "nat".to_string()],
                 vec!["bat".to_string()],
-                vec!["eat".to_string(), "ate".to_string(), "tea".to_string()],
+                vec!["eat".to_string(), "tea".to_string(), "ate".to_string()],
             ]
         );
     }

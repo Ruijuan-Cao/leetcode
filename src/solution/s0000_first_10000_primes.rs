@@ -2,12 +2,12 @@ pub const MAXNUM: usize = 10000;
 
 pub fn first_10000_primes() -> u32 {
     let mut primes = vec![2; MAXNUM];
-    let mut count = 1;
+    let mut index = 1;
 
-    let mut flag;
     let mut i = 3;
     loop {
-        let mut j = 0;
+        let mut flag = false;
+        let mut j = 1;
         loop {
             flag = (primes[j] * primes[j] > i);
             if flag || i % primes[j] == 0 {
@@ -16,11 +16,11 @@ pub fn first_10000_primes() -> u32 {
             j += 1;
         }
         if flag {
-            primes[count] = i;
-            count += 1;
+            primes[index] = i;
+            index += 1;
         }
-        if count == MAXNUM {
-            return primes[MAXNUM - 1];
+        if index == MAXNUM {
+            return primes[index - 1];
         }
         i += 2;
     }

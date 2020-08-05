@@ -36,13 +36,13 @@ impl Solution {
         let mut digits = digits;
         let mut carry = 0;
         for i in (0..digits.len()).rev() {
-            digits[i] = if digits[i] == 9 {
+            if digits[i] == 9 {
                 carry = 1;
-                0
+                digits[i] = 0;
             } else {
                 carry = 0;
-                digits[i] + 1
-            };
+                digits[i] += 1;
+            }
             if carry == 0 {
                 break;
             }

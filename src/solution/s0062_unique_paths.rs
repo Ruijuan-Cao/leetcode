@@ -44,18 +44,13 @@ impl Solution {
     pub fn unique_paths(m: i32, n: i32) -> i32 {
         let (m, n) = ((m - 1) as u64, (n - 1) as u64);
         let sum = m + n;
-        (Solution::partial_factorial(u64::max(m, n), sum)
-            / Solution::partial_factorial(0, u64::min(m, n))) as i32
+        (Self::multis(u64::max(m, n), sum) / Self::multis(0, u64::min(m, n))) as i32
     }
 
     #[inline(always)]
-    pub fn partial_factorial(start: u64, mut end: u64) -> u64 {
-        if start > end {
-            unreachable!()
-        }
+    pub fn multis(start: u64, mut end: u64) -> u64 {
         let mut res = 1;
         while end > start {
-            println!("{}", end);
             res *= end;
             end -= 1;
         }
