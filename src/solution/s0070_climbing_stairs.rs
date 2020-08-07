@@ -46,6 +46,7 @@ impl Solution {
         if n == 2 {
             return 2;
         }
+
         let (mut prev, mut curr) = (1, 2);
         for i in 2..n {
             let next = prev + curr;

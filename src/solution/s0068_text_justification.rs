@@ -77,19 +77,21 @@ use crate::util::vec_string;
 
 impl Solution {
     pub fn full_justify(words: Vec<String>, max_width: i32) -> Vec<String> {
-        let mut res = Vec::new();
+        let mut result = Vec::new();
         let max_width = max_width as usize;
-        let mut i = 0;
         let mut row_len = 0;
         let mut buf = Vec::new();
+
+        let mut i = 0;
         while i < words.len() {
             if words[i].len() > max_width {
                 unreachable!()
             }
+
             let old_len = row_len;
             row_len += words[i].len() + if row_len > 0 { 1 } else { 0 };
             if row_len > max_width {
-                res.push(Solution::compact(buf, max_width, old_len));
+                result.push(Self::compact(buf, max_width, old_len));
                 buf = Vec::new();
                 row_len = 0;
             } else {
@@ -97,8 +99,8 @@ impl Solution {
                 i += 1;
             }
         }
-        res.push(Solution::compact_last(buf, max_width));
-        res
+        result.push(Self::compact_last(buf, max_width));
+        result
     }
 
     fn compact(words: Vec<String>, max_width: usize, row_len: usize) -> String {
