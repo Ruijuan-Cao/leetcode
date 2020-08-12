@@ -39,7 +39,6 @@ impl Solution {
             return false;
         }
         let seq: Vec<char> = word.chars().collect();
-
         for i in 0..height * width {
             if Solution::dfs(
                 i / width,
@@ -53,7 +52,7 @@ impl Solution {
                 return true;
             }
         }
-        false
+        return false;
     }
 
     fn dfs(
@@ -72,7 +71,7 @@ impl Solution {
             return true;
         }
         visited.push((x, y));
-        return (x > 0
+        let result = (x > 0
             && !visited.contains(&(x - 1, y))
             && Solution::dfs(x - 1, y, &seq[1..], board, visited.clone(), height, width))
             || (x + 1 < height
@@ -84,6 +83,7 @@ impl Solution {
             || (y + 1 < width
                 && !visited.contains(&(x, y + 1))
                 && Solution::dfs(x, y + 1, &seq[1..], board, visited.clone(), height, width));
+        result
     }
 }
 

@@ -68,23 +68,24 @@ impl Solution {
         for s in path.split('/') {
             match s {
                 "." => {}
-                "/" => {}
                 "" => {}
                 ".." => {
                     stack.pop();
                 }
-                _ => stack.push(s),
+                _ => {
+                    stack.push(s);
+                }
             }
         }
-        let mut res = String::new();
+        let mut result = String::new();
         for s in stack {
-            res.push('/');
-            res.push_str(s);
+            result.push('/');
+            result.push_str(s);
         }
-        if res.len() > 0 {
-            res
+        if result.len() > 0 {
+            result
         } else {
-            "/".to_owned()
+            "/".to_string()
         }
     }
 }

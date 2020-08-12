@@ -39,7 +39,9 @@ pub struct Solution {}
 // Bottom-up DP
 impl Solution {
     pub fn climb_stairs(n: i32) -> i32 {
-        let n = n as usize;
+        if n < 1 {
+            return 0;
+        }
         if n == 1 {
             return 1;
         }
@@ -47,7 +49,8 @@ impl Solution {
             return 2;
         }
 
-        let (mut prev, mut curr) = (1, 2);
+        let mut prev = 1;
+        let mut curr = 2;
         for i in 2..n {
             let next = prev + curr;
             prev = curr;

@@ -41,9 +41,9 @@ impl Solution {
             result.push(curr);
             return;
         }
-        // current element dropped
+        //drop curr
         Solution::backtrack(start + 1, curr.clone(), nums, result);
-        // current element picked
+        //pick curr
         curr.push(nums[start]);
         Solution::backtrack(start + 1, curr, nums, result);
     }

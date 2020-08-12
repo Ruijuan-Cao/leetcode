@@ -53,7 +53,25 @@ pub struct Solution {}
 
 impl Solution {
     pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
-        0
+        let result = 0;
+        let mut last = nums[0];
+        let mut dup_counter = 0;
+        let mut i = 1;
+        while i < nums.len() {
+            if last == nums[i] {
+                if dup_counter == 0 {
+                    dup_counter = 1;
+                    i += 1;
+                } else {
+                    nums.remove(i);
+                }
+            } else {
+                last = nums[i];
+                dup_counter = 0;
+                i += 1;
+            }
+        }
+        nums.len() as i32
     }
 }
 
@@ -64,5 +82,10 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_80() {}
+    fn test_80() {
+        let mut nums = vec![1, 1, 1, 2, 2, 3];
+        assert_eq!(Solution::remove_duplicates(&mut nums), 5);
+        nums = vec![0, 0, 1, 1, 1, 1, 2, 3, 3];
+        assert_eq!(Solution::remove_duplicates(&mut nums), 7);
+    }
 }

@@ -32,7 +32,7 @@ impl Solution {
         }
         let (mut start, mut end) = (0_usize, 0_usize);
         let mut result = (0_usize, 0_usize);
-        loop {}
+        for i in 0..s.len() {}
         s[result.0..result.1].to_owned()
     }
 
@@ -52,5 +52,10 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_76() {}
+    fn test_76() {
+        assert_eq!(
+            Solution::min_window("ADOBECODEBANC".to_string(), "ABC".to_string()),
+            "BANC".to_string()
+        );
+    }
 }

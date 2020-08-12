@@ -39,7 +39,6 @@ impl Solution {
             return;
         }
         if end - start + 1 < k {
-            // elements is not enough, return quickly
             return;
         }
         for i in start..end + 1 {

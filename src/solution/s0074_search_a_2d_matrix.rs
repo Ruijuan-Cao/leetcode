@@ -51,7 +51,7 @@ impl Solution {
             return false;
         }
         let mut size = height * width;
-        let mut base = 0_usize;
+        let mut base = 0;
         while size > 1 {
             let half = size / 2;
             let mid = base + half;

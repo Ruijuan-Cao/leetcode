@@ -35,11 +35,10 @@ impl Solution {
         if nums.is_empty() {
             return;
         }
-        let (mut lower_idx, mut upper_idx) = (0_usize, nums.len() - 1);
-        let mut i = 0_usize;
+        let (mut lower_idx, mut upper_idx) = (0, nums.len() - 1);
+        let mut i = 0;
         while i <= upper_idx {
             if nums[i] < 1 {
-                // lower_idx <= i, we've scanned it so we know nums[lower_idx] <= 1, i++
                 nums.swap(lower_idx, i);
                 i += 1;
                 lower_idx += 1;
