@@ -41,10 +41,11 @@ impl Solution {
         if end - start + 1 < k {
             return;
         }
+
         for i in start..end + 1 {
             let mut vec = curr.clone();
             vec.push(i);
-            Solution::backtrack(i + 1, end, k - 1, vec, result);
+            Self::backtrack(i + 1, end, k - 1, vec, result);
         }
     }
 }

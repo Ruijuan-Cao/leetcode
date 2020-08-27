@@ -40,7 +40,7 @@ impl Solution {
         }
         let seq: Vec<char> = word.chars().collect();
         for i in 0..height * width {
-            if Solution::dfs(
+            if Self::dfs(
                 i / width,
                 i % width,
                 &seq[..],
@@ -73,16 +73,16 @@ impl Solution {
         visited.push((x, y));
         let result = (x > 0
             && !visited.contains(&(x - 1, y))
-            && Solution::dfs(x - 1, y, &seq[1..], board, visited.clone(), height, width))
+            && Self::dfs(x - 1, y, &seq[1..], board, visited.clone(), height, width))
             || (x + 1 < height
                 && !visited.contains(&(x + 1, y))
-                && Solution::dfs(x + 1, y, &seq[1..], board, visited.clone(), height, width))
+                && Self::dfs(x + 1, y, &seq[1..], board, visited.clone(), height, width))
             || (y > 0
                 && !visited.contains(&(x, y - 1))
-                && Solution::dfs(x, y - 1, &seq[1..], board, visited.clone(), height, width))
+                && Self::dfs(x, y - 1, &seq[1..], board, visited.clone(), height, width))
             || (y + 1 < width
                 && !visited.contains(&(x, y + 1))
-                && Solution::dfs(x, y + 1, &seq[1..], board, visited.clone(), height, width));
+                && Self::dfs(x, y + 1, &seq[1..], board, visited.clone(), height, width));
         result
     }
 }

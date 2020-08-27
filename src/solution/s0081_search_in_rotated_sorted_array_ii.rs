@@ -37,6 +37,12 @@ pub struct Solution {}
 
 impl Solution {
     pub fn search(nums: Vec<i32>, target: i32) -> bool {
+        for i in 0..nums.len() {
+            if nums[i] == target {
+                return true;
+            }
+        }
+
         false
     }
 }
@@ -48,5 +54,8 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_81() {}
+    fn test_81() {
+        assert_eq!(Solution::search(vec![2, 5, 6, 0, 0, 1, 2], 0), true);
+        assert_eq!(Solution::search(vec![2, 5, 6, 0, 0, 1, 2], 3), false);
+    }
 }

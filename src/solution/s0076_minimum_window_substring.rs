@@ -26,14 +26,43 @@ pub struct Solution {}
 // submission codes start here
 use std::collections::HashMap;
 impl Solution {
-    pub fn min_window(s: String, t: String) -> String {
+    pub fn min_window1(s: String, t: String) -> String {
         if t.is_empty() || t.len() > s.len() {
-            return "".to_owned();
+            return "".to_string();
         }
-        let (mut start, mut end) = (0_usize, 0_usize);
-        let mut result = (0_usize, 0_usize);
-        for i in 0..s.len() {}
-        s[result.0..result.1].to_owned()
+        let t_len = t.len();
+
+        let (mut left, mut right) = (0, 0);
+        let mut count = 0;
+        let mut min_len = std::usize::MAX;
+        let mut result = (0, 0);
+        let mut count_map = Solution::count_char(t);
+        println!("{:?}", count_map);
+        let chars: Vec<char> = s.chars().collect();
+
+        for i in 0..s.len() {
+            if count_map[&chars[i]] > 0 {
+                count += 1;
+            }
+            let tmp = count_map[&chars[i]];
+            count_map.entry(chars[left]).or_insert(tmp - 1);
+
+            while count == t_len {
+                if i - left + 1 < min_len {
+                    min_len = i - left + 1;
+                    result.0 = left;
+                    result.1 = i;
+                }
+                let tmp = count_map[&chars[left]];
+                count_map.entry(chars[left]).or_insert(tmp + 1);
+                if count_map[&chars[left]] > 0 {
+                    count -= 1;
+                }
+                left += 1;
+            }
+        }
+
+        s[result.0..result.1].to_string()
     }
 
     fn count_char(s: String) -> HashMap<char, i32> {
@@ -42,6 +71,43 @@ impl Solution {
             *res.entry(ch).or_insert(0) += 1;
         }
         res
+    }
+
+    pub fn min_window(s: String, t: String) -> String {
+        let mut mem = vec![0; 128];
+        for ch in t.chars().into_iter() {
+            mem[ch as usize] += 1;
+        }
+        let mut t_len = t.len();
+        let mut left = 0;
+        let mut min_left = 0;
+        let mut min_right = std::usize::MAX;
+        let chars: Vec<char> = s.chars().collect();
+        for right in 0..s.len() {
+            if mem[chars[right] as usize] > 0 {
+                t_len -= 1;
+            }
+            mem[chars[right] as usize] -= 1;
+
+            if t_len == 0 {
+                while mem[chars[left] as usize] < 0 {
+                    mem[chars[left] as usize] += 1;
+                    left += 1;
+                }
+                if right - left < min_right - min_left {
+                    min_left = left;
+                    min_right = right;
+                }
+                mem[chars[left] as usize] += 1;
+                left += 1;
+                t_len += 1;
+            }
+        }
+        if min_right == std::usize::MAX {
+            "".to_string()
+        } else {
+            s[min_left..min_right + 1].to_string()
+        }
     }
 }
 
@@ -54,7 +120,7 @@ mod tests {
     #[test]
     fn test_76() {
         assert_eq!(
-            Solution::min_window("ADOBECODEBANC".to_string(), "ABC".to_string()),
+            Solution::min_window1("ADOBECODEBANC".to_string(), "ABC".to_string()),
             "BANC".to_string()
         );
     }

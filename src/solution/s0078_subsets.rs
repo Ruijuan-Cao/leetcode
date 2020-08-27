@@ -31,9 +31,9 @@ pub struct Solution {}
 
 impl Solution {
     pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
-        let mut res = Vec::new();
-        Solution::backtrack(0, vec![], &nums, &mut res);
-        res
+        let mut result = Vec::new();
+        Self::backtrack(0, vec![], &nums, &mut result);
+        result
     }
 
     fn backtrack(start: usize, mut curr: Vec<i32>, nums: &Vec<i32>, result: &mut Vec<Vec<i32>>) {
@@ -42,10 +42,10 @@ impl Solution {
             return;
         }
         //drop curr
-        Solution::backtrack(start + 1, curr.clone(), nums, result);
+        Self::backtrack(start + 1, curr.clone(), nums, result);
         //pick curr
         curr.push(nums[start]);
-        Solution::backtrack(start + 1, curr, nums, result);
+        Self::backtrack(start + 1, curr, nums, result);
     }
 }
 
