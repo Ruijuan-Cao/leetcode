@@ -44,7 +44,27 @@ use crate::util::linked_list::{to_list, ListNode};
 // }
 impl Solution {
     pub fn delete_duplicates(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        None
+        if head.is_none() {
+            return None;
+        }
+        let mut counter = 1;
+        let mut last = head.as_ref().unwrap().val;
+        let mut dump = head;
+        let mut node = &mut dump.as_mut().unwrap().next;
+        loop {
+            match node {
+                Some(n) if n.val == last => {
+                    *node = n.next.take();
+                    counter += 1;
+                }
+                Some(n) => {
+                    counter = 0;
+                    last = n.val;
+                    node = &mut n.next;
+                }
+                None => return dump,
+            }
+        }
     }
 }
 
@@ -55,5 +75,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_83() {}
+    fn test_83() {
+        assert_eq!(
+            Solution::delete_duplicates(to_list(vec![1, 1, 2])),
+            to_list(vec![1, 2])
+        );
+        assert_eq!(
+            Solution::delete_duplicates(to_list(vec![1, 1, 2, 3, 3])),
+            to_list(vec![1, 2, 3])
+        );
+    }
 }
