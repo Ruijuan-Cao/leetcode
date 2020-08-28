@@ -43,10 +43,47 @@ pub struct Solution {}
 
 // hope that regex was included in std library...
 // TODO: NFA
+
 impl Solution {
     pub fn is_number(s: String) -> bool {
+        let mut state = "init";
+        for c in s.trim().chars() {
+            state = match c {
+                '+' | '-' => match state {
+                    "init" => "sign",
+                    "exp" => "exp_sign",
+                    _ => "wrong",
+                },
+                '0'...'9' => match state {
+                    "init" | "num" | "sign" => "num",
+                    "frac" | "dot" | "leading_dot" => "frac",
+                    "exp" | "exp_num" | "exp_sign" => "exp_num",
+                    _ => "wrong",
+                },
+                '.' => match state {
+                    "init" | "sign" => "leading_dot",
+                    "num" => "dot",
+                    _ => "wrong",
+                },
+                'e' => match state {
+                    "num" | "frac" | "dot" => "exp",
+                    _ => "wrong",
+                },
+                _ => "wrong",
+            };
+            if state == "wrong" {
+                return false;
+            }
+        }
+        ["num", "frac", "exp_num", "dot"].contains(&state)
+    }
+
+    pub fn is_number1(s: String) -> bool {
         let mut s = s.trim();
-        println!("{:?}", s);
+        if s.len() == 0 {
+            return false;
+        }
+
         let mut chars: Vec<char> = s.chars().collect();
         let mut digit = false;
         let mut dot = false;
@@ -58,15 +95,15 @@ impl Solution {
             if chars[i] >= '0' && chars[i] <= '9' {
                 digit = true;
             } else if chars[i] == '.' {
-                if digit == false {
+                if digit == false && i > 0 && signal == false {
                     return false;
                 }
-                if e {
+                if e || dot {
                     return false;
                 }
                 dot = true;
             } else if chars[i] == '+' || chars[i] == '-' {
-                if signal || dot {
+                if signal {
                     return false;
                 }
                 if (digit || e) && last != 'e' {
@@ -74,8 +111,11 @@ impl Solution {
                 }
                 signal = true;
             } else if chars[i] == 'e' {
-                if !digit {
+                if !digit || e {
                     return false;
+                }
+                if last == '.' {
+                    dot = false;
                 }
                 e = true;
             } else {
@@ -83,7 +123,10 @@ impl Solution {
             }
             last = chars[i];
         }
-        if last == 'e' || last == '+' || last == '-' || last == '.' {
+        if last == 'e' || last == '+' || last == '-' {
+            return false;
+        }
+        if digit == false {
             return false;
         }
         true
@@ -99,6 +142,11 @@ mod tests {
     #[test]
     fn test_65() {
         assert_eq!(Solution::is_number("0".to_string()), true);
+        assert_eq!(Solution::is_number(".".to_string()), false);
+        assert_eq!(Solution::is_number(".1".to_string()), true);
+        assert_eq!(Solution::is_number("3.".to_string()), true);
+        assert_eq!(Solution::is_number("3..".to_string()), false);
+        assert_eq!(Solution::is_number("+.8".to_string()), true);
         assert_eq!(Solution::is_number(" 0.1".to_string()), true);
         assert_eq!(Solution::is_number("abc".to_string()), false);
         assert_eq!(Solution::is_number("1 a".to_string()), false);

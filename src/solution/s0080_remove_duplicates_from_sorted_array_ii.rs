@@ -53,6 +53,9 @@ pub struct Solution {}
 
 impl Solution {
     pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
+        if nums.len() == 0 {
+            return 0;
+        }
         let mut last = nums[0];
         let mut counter = 0;
         let mut i = 1;

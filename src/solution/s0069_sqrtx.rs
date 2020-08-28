@@ -36,6 +36,9 @@ pub struct Solution {}
 // Zero point: (root^2 + n) / (2 * root)
 impl Solution {
     pub fn my_sqrt(x: i32) -> i32 {
+        if x == 0 {
+            return 0;
+        }
         let mut size = x;
         let mut base = 1;
         while size > 1 {

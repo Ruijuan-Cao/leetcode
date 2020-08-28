@@ -48,9 +48,31 @@ impl Solution {
         for interval in intervals.into_iter() {
             match result.last_mut() {
                 Some(last) => {
-                    if last.end > interval.start {
+                    if last.end >= interval.start {
                         if interval.end > last.end {
                             last.end = interval.end;
+                        }
+                        continue;
+                    }
+                }
+                None => {}
+            }
+            result.push(interval);
+        }
+        result
+    }
+
+    pub fn merge2(intervals: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+        let mut intervals = intervals;
+        intervals.sort_by(|a, b| a.cmp(b));
+
+        let mut result: Vec<Vec<i32>> = Vec::new();
+        for interval in intervals.into_iter() {
+            match result.last_mut() {
+                Some(last) => {
+                    if last[1] >= interval[0] {
+                        if interval[1] > last[1] {
+                            last[1] = interval[1];
                         }
                         continue;
                     }
@@ -83,6 +105,16 @@ mod tests {
                 Interval::new(8, 10),
                 Interval::new(15, 18)
             ]
+        );
+
+        assert_eq!(
+            Solution::merge2(vec![vec![1, 3], vec![2, 6], vec![8, 10], vec![15, 18]]),
+            vec![vec![1, 6], vec![8, 10], vec![15, 18]]
+        );
+
+        assert_eq!(
+            Solution::merge2(vec![vec![1, 4], vec![4, 5]]),
+            vec![vec![1, 5]]
         );
     }
 }

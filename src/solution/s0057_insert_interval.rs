@@ -70,6 +70,36 @@ impl Solution {
 
         result
     }
+
+    pub fn insert2(intervals: Vec<Vec<i32>>, new_interval: Vec<i32>) -> Vec<Vec<i32>> {
+        let mut result: Vec<Vec<i32>> = Vec::new();
+        let mut new_interval = new_interval;
+        let mut inserting = false;
+        let mut inserted = false;
+
+        for interval in intervals.into_iter() {
+            if new_interval[0] <= interval[1] && !inserted {
+                inserting = true;
+            }
+            if inserting {
+                if new_interval[1] >= interval[0] {
+                    new_interval[0] = i32::min(new_interval[0], interval[0]);
+                    new_interval[1] = i32::max(new_interval[1], interval[1]);
+                } else {
+                    result.push(vec![new_interval[0], new_interval[1]]);
+                    inserting = false;
+                    inserted = true;
+                }
+            }
+            if !inserting {
+                result.push(interval);
+            }
+        }
+        if !inserted {
+            result.push(new_interval);
+        }
+        result
+    }
 }
 
 // submission codes end
