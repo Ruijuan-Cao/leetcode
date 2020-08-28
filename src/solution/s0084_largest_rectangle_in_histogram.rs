@@ -54,7 +54,8 @@ impl Solution {
             }
             hs.push(h);
         }
-        // drain stack
+
+        //drain stack
         while !hs.is_empty() {
             max_area = i32::max(
                 max_area,

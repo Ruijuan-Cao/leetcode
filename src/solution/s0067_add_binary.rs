@@ -32,14 +32,13 @@ impl Solution {
         let mut a: Vec<char> = a.chars().collect();
         let mut b: Vec<char> = b.chars().collect();
         let mut carry = 0;
-
         while !a.is_empty() || !b.is_empty() {
             let val_a = a.pop().map_or(0, |ch| ch.to_digit(10).unwrap());
             let val_b = b.pop().map_or(0, |ch| ch.to_digit(10).unwrap());
             let mut sum = val_a + val_b + carry;
             if sum > 1 {
-                sum -= 2;
                 carry = 1;
+                sum -= 2;
             } else {
                 carry = 0;
             }
