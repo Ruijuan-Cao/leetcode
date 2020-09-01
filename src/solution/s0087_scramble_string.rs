@@ -70,6 +70,38 @@ pub struct Solution {}
 
 impl Solution {
     pub fn is_scramble(s1: String, s2: String) -> bool {
+        if s1.len() != s2.len() {
+            return false;
+        }
+
+        if s1 == s2 {
+            return true;
+        }
+
+        let mut char1: Vec<char> = s1.chars().collect();
+        let mut char2: Vec<char> = s2.chars().collect();
+
+        char1.sort();
+        char2.sort();
+        for i in 0..s1.len() {
+            if char1[i] != char2[i] {
+                return false;
+            }
+        }
+        for i in 1..s1.len() {
+            if Self::is_scramble(s1[0..i].to_string(), s2[0..i].to_string())
+                && Self::is_scramble(s1[i..].to_string(), s2[i..].to_string())
+            {
+                return true;
+            }
+
+            if Self::is_scramble(s1[0..i].to_string(), s2[(s1.len() - i)..].to_string())
+                && Self::is_scramble(s1[i..].to_string(), s2[0..(s1.len() - i)].to_string())
+            {
+                return true;
+            }
+        }
+
         false
     }
 }
@@ -81,5 +113,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_87() {}
+    fn test_87() {
+        assert_eq!(
+            Solution::is_scramble("great".to_string(), "rgeat".to_string()),
+            true
+        );
+
+        assert_eq!(
+            Solution::is_scramble("abcde".to_string(), "caebd".to_string()),
+            false
+        );
+    }
 }
