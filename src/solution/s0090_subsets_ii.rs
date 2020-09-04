@@ -37,7 +37,7 @@ using BTreeMap to preserve order (easy for test)
 use std::collections::BTreeMap;
 impl Solution {
     pub fn subsets_with_dup(nums: Vec<i32>) -> Vec<Vec<i32>> {
-        let mut res = Vec::new();
+        let mut result = Vec::new();
         let nums = nums
             .into_iter()
             .fold(BTreeMap::new(), |mut map, v| {
@@ -46,8 +46,9 @@ impl Solution {
             })
             .into_iter()
             .collect::<Vec<(i32, i32)>>();
-        Solution::backtrack(0, vec![], &nums, &mut res);
-        res
+
+        Solution::backtrack(0, vec![], &nums, &mut result);
+        result
     }
 
     fn backtrack(
@@ -65,7 +66,7 @@ impl Solution {
             for _ in 0..repeat {
                 inner.push(nums[start].0);
             }
-            Solution::backtrack(start + 1, inner, nums, result);
+            Self::backtrack(start + 1, inner, nums, result);
         }
     }
 }
