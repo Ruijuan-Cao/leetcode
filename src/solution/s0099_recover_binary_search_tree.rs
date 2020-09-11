@@ -87,8 +87,8 @@ use crate::util::tree::{to_tree, TreeNode};
 use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
-    pub fn recover_tree(root: &mut Option<Rc<RefCell<TreeNode>>>) {
-        Solution::recover_helper(root.as_ref());
+    pub fn recover_tree2(root: &mut Option<Rc<RefCell<TreeNode>>>) {
+        Self::recover_helper(root.as_ref());
     }
 
     fn recover_helper(
@@ -99,16 +99,23 @@ impl Solution {
         bool,
     ) {
         if let Some(node) = root {
-            let (l_min, l_max, l_flag) = Solution::recover_helper(node.borrow().left.as_ref());
-            let (r_min, r_max, r_flag) = Solution::recover_helper(node.borrow().right.as_ref());
-            // we've already find a swap, return quickly
+            println!("{:?}", node);
+            let (l_min, l_max, l_flag) = Self::recover_helper(node.borrow().left.as_ref());
+            println!("l:{:?}-{:?}-{}", l_min, l_max, l_flag);
+            let (r_min, r_max, r_flag) = Self::recover_helper(node.borrow().right.as_ref());
+            println!("r:{:?}-{:?}-{}", r_min, r_max, r_flag);
+
             if l_flag || r_flag {
                 return (None, None, true);
             }
             let root_val = node.borrow().val;
             let l_err = l_max.as_ref().map_or(false, |v| v.borrow().val > root_val);
             let r_err = r_min.as_ref().map_or(false, |v| v.borrow().val < root_val);
-            // invalid sub-tree found, do swap
+            println!("{:?}", root_val);
+            println!("{}-{}", l_err, r_err);
+            println!("l:{:?}-{:?}-{}", l_min, l_max, l_flag);
+            println!("r:{:?}-{:?}-{}", r_min, r_max, r_flag);
+
             if l_err || r_err {
                 if l_err && r_err {
                 } else if l_err {
@@ -120,7 +127,7 @@ impl Solution {
                     std::mem::swap(
                         &mut r_min.unwrap().borrow_mut().val,
                         &mut node.borrow_mut().val,
-                    )
+                    );
                 }
                 return (None, None, true);
             }
@@ -139,6 +146,39 @@ impl Solution {
             )
         } else {
             (None, None, false)
+        }
+    }
+
+    pub fn recover_tree(root: &mut Option<Rc<RefCell<TreeNode>>>) {
+        let (mut first, mut second) = (None, None);
+        let mut prev = None;
+        Self::dfs(root, &mut first, &mut second, &mut prev);
+        std::mem::swap(
+            &mut first.unwrap().borrow_mut().val,
+            &mut second.unwrap().borrow_mut().val,
+        );
+    }
+    fn dfs(
+        node: &Option<Rc<RefCell<TreeNode>>>,
+        first: &mut Option<Rc<RefCell<TreeNode>>>,
+        second: &mut Option<Rc<RefCell<TreeNode>>>,
+        prev: &mut Option<Rc<RefCell<TreeNode>>>,
+    ) {
+        if let Some(real_node) = node {
+            let real_node_ref = real_node.as_ref().borrow();
+            Self::dfs(&real_node_ref.left, first, second, prev);
+            if let Some(prev_node) = prev {
+                if prev_node.as_ref().borrow().val >= real_node_ref.val {
+                    if first.is_none() {
+                        *first = Some(prev_node.clone());
+                    }
+                    if first.is_some() {
+                        *second = Some(real_node.clone());
+                    }
+                }
+            };
+            *prev = Some(real_node.clone());
+            Self::dfs(&real_node_ref.right, first, second, prev);
         }
     }
 }

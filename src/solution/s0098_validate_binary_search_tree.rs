@@ -50,7 +50,7 @@ use std::rc::Rc;
 impl Solution {
     pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         let mut vec = vec![];
-        Solution::preorder_traverse(root.as_ref(), &mut vec)
+        Self::preorder_traverse(root.as_ref(), &mut vec)
     }
 
     fn preorder_traverse(
@@ -68,8 +68,8 @@ impl Solution {
             let mut to_right = formers.clone();
             formers.push((-1, root_val));
             to_right.push((1, root_val));
-            Solution::preorder_traverse(node.borrow().left.as_ref(), formers)
-                && Solution::preorder_traverse(node.borrow().right.as_ref(), &mut to_right)
+            Self::preorder_traverse(node.borrow().left.as_ref(), formers)
+                && Self::preorder_traverse(node.borrow().right.as_ref(), &mut to_right)
         } else {
             true
         }

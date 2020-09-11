@@ -34,15 +34,15 @@ use std::rc::Rc;
 impl Solution {
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         let mut max = 0;
-        Solution::depth_helper(root.as_ref(), &mut max, 0);
+        Self::depth_helper(root.as_ref(), &mut max, 0);
         max
     }
 
     fn depth_helper(root: Option<&Rc<RefCell<TreeNode>>>, max: &mut i32, curr: i32) {
         if let Some(node) = root {
             *max = i32::max(*max, curr + 1);
-            Solution::depth_helper(node.borrow().left.as_ref(), max, curr + 1);
-            Solution::depth_helper(node.borrow().right.as_ref(), max, curr + 1);
+            Self::depth_helper(node.borrow().left.as_ref(), max, curr + 1);
+            Self::depth_helper(node.borrow().right.as_ref(), max, curr + 1);
         }
     }
 }

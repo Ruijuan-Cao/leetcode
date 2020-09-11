@@ -44,8 +44,8 @@ impl Solution {
         let root_idx = inorder.iter().position(|&v| v == preorder[0]).unwrap();
         Some(Rc::new(RefCell::new(TreeNode {
             val: preorder[0],
-            left: Solution::build_tree_helper(&preorder[1..root_idx + 1], &inorder[0..root_idx]),
-            right: Solution::build_tree_helper(&preorder[root_idx + 1..], &inorder[root_idx + 1..]),
+            left: Self::build_tree_helper(&preorder[1..root_idx + 1], &inorder[0..root_idx]),
+            right: Self::build_tree_helper(&preorder[root_idx + 1..], &inorder[root_idx + 1..]),
         })))
     }
 }

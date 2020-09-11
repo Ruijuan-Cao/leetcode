@@ -38,11 +38,11 @@ use std::collections::VecDeque;
 use std::rc::Rc;
 impl Solution {
     pub fn level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
-        let mut res = Vec::new();
-        let mut current_level = 0;
+        let mut result = Vec::new();
         if root.is_none() {
-            return res;
+            return result;
         }
+        let mut cur_level = 0;
         let mut deq = VecDeque::new();
         deq.push_back((0, root.clone()));
         let mut vec = Vec::new();
@@ -50,18 +50,18 @@ impl Solution {
             if let Some((level, Some(node))) = deq.pop_front() {
                 deq.push_back((level + 1, node.borrow().left.clone()));
                 deq.push_back((level + 1, node.borrow().right.clone()));
-                if level > current_level {
-                    res.push(vec);
+                if level > cur_level {
+                    result.push(vec);
                     vec = Vec::new();
-                    current_level = level;
+                    cur_level = level;
                 }
                 vec.push(node.borrow().val);
             }
         }
         if !vec.is_empty() {
-            res.push(vec)
+            result.push(vec);
         }
-        res
+        result
     }
 }
 

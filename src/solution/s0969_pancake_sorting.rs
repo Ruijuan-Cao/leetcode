@@ -126,7 +126,7 @@ mod tests {
     fn make_shuffled_vector(a: &Vec<i32>) -> Vec<i32> {
         let mut rng = thread_rng();
         let mut res = a.clone();
-        res.shuffle(&mut rng);
+        // res.shuffle(&mut rng);
         res
     }
 
