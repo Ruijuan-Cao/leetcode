@@ -35,7 +35,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
     pub fn build_tree(inorder: Vec<i32>, postorder: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
-        Solution::build_tree_helper(&postorder[..], &inorder[..])
+        Self::build_tree_helper(&postorder[..], &inorder[..])
     }
 
     fn build_tree_helper(postorder: &[i32], inorder: &[i32]) -> Option<Rc<RefCell<TreeNode>>> {
@@ -46,10 +46,11 @@ impl Solution {
             .iter()
             .position(|v| v == postorder.last().unwrap())
             .unwrap();
+
         Some(Rc::new(RefCell::new(TreeNode {
             val: *postorder.last().unwrap(),
-            left: Solution::build_tree_helper(&postorder[0..root_idx], &inorder[0..root_idx]),
-            right: Solution::build_tree_helper(
+            left: Self::build_tree_helper(&postorder[0..root_idx], &inorder[0..root_idx]),
+            right: Self::build_tree_helper(
                 &postorder[root_idx..postorder.len() - 1],
                 &inorder[root_idx + 1..],
             ),

@@ -39,10 +39,11 @@ impl Solution {
         if nums.is_empty() {
             return None;
         }
+
         Some(Rc::new(RefCell::new(TreeNode {
             val: nums[nums.len() / 2],
-            left: Solution::bst_helper(&nums[0..(nums.len() / 2)]),
-            right: Solution::bst_helper(&nums[(nums.len() / 2 + 1)..]),
+            left: Self::bst_helper(&nums[0..nums.len() / 2]),
+            right: Self::bst_helper(&nums[(nums.len() / 2 + 1)..]),
         })))
     }
 }
