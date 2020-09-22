@@ -51,14 +51,14 @@ use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
     pub fn is_balanced(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        Solution::balanced_helper(root.as_ref()).is_some()
+        Self::balanced_helper(root.as_ref()).is_some()
     }
 
     fn balanced_helper(root: Option<&Rc<RefCell<TreeNode>>>) -> Option<i32> {
         if let Some(node) = root {
             let pair = (
-                Solution::balanced_helper(node.borrow().left.as_ref()),
-                Solution::balanced_helper(node.borrow().right.as_ref()),
+                Self::balanced_helper(node.borrow().left.as_ref()),
+                Self::balanced_helper(node.borrow().right.as_ref()),
             );
             match pair {
                 (Some(left), Some(right)) => {

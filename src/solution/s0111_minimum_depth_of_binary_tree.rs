@@ -37,15 +37,16 @@ impl Solution {
         if root.is_none() {
             return 0;
         }
-        let mut deq = VecDeque::new();
-        deq.push_back((1, root.clone()));
-        while !deq.is_empty() {
-            if let Some((level, Some(node))) = deq.pop_front() {
+
+        let mut queue = VecDeque::new();
+        queue.push_back((1, root.clone()));
+        while !queue.is_empty() {
+            if let Some((level, Some(node))) = queue.pop_front() {
                 if node.borrow().left.is_none() && node.borrow().right.is_none() {
                     return level;
                 }
-                deq.push_back((level + 1, node.borrow().left.clone()));
-                deq.push_back((level + 1, node.borrow().right.clone()));
+                queue.push_back((level + 1, node.borrow().left.clone()));
+                queue.push_back((level + 1, node.borrow().right.clone()));
             }
         }
         0

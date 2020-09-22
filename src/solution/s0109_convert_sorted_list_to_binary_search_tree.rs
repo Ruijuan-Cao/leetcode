@@ -33,13 +33,13 @@ use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
     pub fn sorted_list_to_bst(head: Option<Box<ListNode>>) -> Option<Rc<RefCell<TreeNode>>> {
-        let mut arr = Vec::new();
+        let mut vec = Vec::new();
         let mut head = head;
         while let Some(node) = head {
-            arr.push(node.val);
+            vec.push(node.val);
             head = node.next;
         }
-        Solution::bst_helper(&arr[..])
+        Self::bst_helper(&vec)
     }
 
     fn bst_helper(nums: &[i32]) -> Option<Rc<RefCell<TreeNode>>> {
@@ -48,8 +48,8 @@ impl Solution {
         }
         Some(Rc::new(RefCell::new(TreeNode {
             val: nums[nums.len() / 2],
-            left: Solution::bst_helper(&nums[0..(nums.len() / 2)]),
-            right: Solution::bst_helper(&nums[(nums.len() / 2 + 1)..]),
+            left: Self::bst_helper(&nums[0..(nums.len() / 2)]),
+            right: Self::bst_helper(&nums[(nums.len() / 2 + 1)..]),
         })))
     }
 }
